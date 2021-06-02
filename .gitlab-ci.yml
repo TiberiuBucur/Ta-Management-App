@@ -16,6 +16,8 @@ test:
 
 deploy:
   stage: deploy
+  variables:
+    - PORT: 5000
   script:
     - apt update && apt install -y ruby git curl
     - gem install --user-install dpl-heroku
