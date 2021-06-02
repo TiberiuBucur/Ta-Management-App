@@ -1,0 +1,17 @@
+build:
+  stage: build
+  artifacts:
+    paths:
+      - src/client/build
+  script:
+    - cd client && npm run build
+  
+test:
+  stage: test
+  script:
+    - echo "Nothing to test..."
+
+deploy:
+  stage: deploy
+  script:
+    - echo "TODO"
