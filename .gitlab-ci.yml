@@ -6,7 +6,7 @@ build:
   script:
     - cd src/client && npm install
     - cd ../server && npm install
-    - cd src/client && npm run build
+    - cd ../client && npm run build
   
 test:
   stage: test
