@@ -1,1 +1,1 @@
-web: sh target/bin/simplewebapp
+web: node src/server/index.js
