@@ -4,7 +4,7 @@ build:
     paths:
       - src
   script:
-    - true
+    - echo "hello there"
     # - cd src/client && npm install
     # - cd ../server && npm install
     # - cd ../client && npm run build
