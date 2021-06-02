@@ -1,9 +1,11 @@
 FROM node:latest
-WORKDIR /app
-COPY src/client/package.json /app/src/client
-COPY src/client/package.json /app/src/server
-RUN cd /app/src/client && npm install
-RUN cd /app/src/server && npm install
 
+WORKDIR /app
+COPY src/client/package.json ./src/client/
+COPY src/server/package.json ./src/server/
+RUN cd src/client && npm install
+RUN cd src/server && npm install
 COPY . /app/
-CMD "cd /app/src/client"
+RUN cd src/client && npm run build
+
+CMD node src/server/index.js
