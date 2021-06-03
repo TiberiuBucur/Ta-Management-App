@@ -12,12 +12,35 @@ const AvailSelect = () => {
 
 
 const Selection = () => {
+    const [userName, setUserName] = useState("");
     const [selection, setSelection] = useState({
         Mon: "None",
         Thu: "None",
         Fri: "None"
     })
-    const handleSubmit = () => console.log(selection);
+    const handleSubmit = async () => {
+        console.log("Submitted: " + selection)
+        console.log("Username: " + userName)
+
+        if (userName === "") {
+            alert("Please enter a non-empty username");
+            return;
+        }
+
+        const response = await fetch("/newavail", {
+            method: 'POST',
+            mode: 'same-origin', 
+            cache: 'no-cache', 
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...selection, "userName": userName})
+          });
+        const body = await response.json()
+
+        console.log(body)
+    }
     
     return (
         <div>
@@ -67,6 +90,9 @@ const Selection = () => {
             </ul>
             <br/>
             <br/>
+            <input type="text" value={userName} onChange={(event) => {
+                setUserName(event.currentTarget.value)
+            }} />
             <button onClick={handleSubmit}>SUBMIT</button>
         </div>
     )
