@@ -1,7 +1,7 @@
-
 const path = require("path")
 const express = require("express");
-const db = require("./db/db")
+const Handler = require("./src/handler");
+const postgre = require("./db/postgre")
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 5000;
 // const dbUrl = process.env.DATABASE_URL || "SOMETHING SOMETHING";
 // console.log(dbUrl);
 
-db.query('SELECT NOW() as now')
-    .then(res => console.log(res))
-    .catch(err => console.log(err, "OMG DIDNT WORK-----------------"));
+// postgre.query('SELECT NOW() as now')
+//     .then(res => console.log(res))
+//     .catch(err => console.log(err, "OMG DIDNT WORK-----------------"));
 
 // pool.query('SELECT * FROM users;')
 //     .then(res => {
@@ -23,9 +23,12 @@ db.query('SELECT NOW() as now')
 server.use(express.static(path.resolve(__dirname, "../client/build")));
 server.use(express.json())
 
-server.post("/newavail", (req, res) => {
+const handler = new Handler(postgre);
+
+server.post("/newavail", async (req, res) => {
     console.log(req.body);
-    res.status(200).send({msg: "Updated availability for user: " + req.body.userName})
+    const msg = await handler.submitAvailability(req.body.userName, req.body.submitAvailability)
+    res.status(200).send({msg})
 })
 
 server.listen(PORT, () => {
