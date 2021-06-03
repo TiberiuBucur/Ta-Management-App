@@ -11,7 +11,7 @@ build:
 test:
   stage: test
   script:
-    - node src/server/DBConnectionTest.js
+    - cd src/server && npm run test
 
 deploy:
   stage: deploy
