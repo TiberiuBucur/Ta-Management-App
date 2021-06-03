@@ -13,7 +13,6 @@ const devMode = false;
 
 let pool;
 if (devMode) {
-
     pool = new Pool({
         user: 'postgres',
         host: 'localhost',
@@ -23,7 +22,10 @@ if (devMode) {
     });
 } else {
     pool = new Pool({
-        connectionString: dbUrl
+        connectionString: dbUrl,
+        ssl: {
+            rejectUnauthorized: false
+        }
     });
 }
 
