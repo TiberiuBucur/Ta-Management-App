@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, useState} from "react"
+import React, {useState} from "react"
 
 const AvailSelect = () => {
 
