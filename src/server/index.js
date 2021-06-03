@@ -11,7 +11,7 @@ const name = 'ag1319';
 const addOn = '5';
 const devMode = false;
 
-const pool;
+let pool;
 if (devMode) {
 
     pool = new Pool({
