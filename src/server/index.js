@@ -1,38 +1,17 @@
+
+const path = require("path")
 const express = require("express");
-const path = require("path");
-const { Pool, Client } = require('pg');
+const db = require("./db/db")
 
-const app = express();
+const server = express();
 const PORT = process.env.PORT || 5000;
-const dbUrl = process.env.DATABASE_URL || "SOMETHING SOMETHING";
-console.log(dbUrl);
 
-const name = 'ag1319';
-const addOn = '5';
-const devMode = false;
+// const dbUrl = process.env.DATABASE_URL || "SOMETHING SOMETHING";
+// console.log(dbUrl);
 
-let pool;
-if (devMode) {
-    pool = new Pool({
-        user: 'postgres',
-        host: 'localhost',
-        database: 'testdb',
-        password: 'fghijbon8976',
-        port: 5432
-    });
-} else {
-    pool = new Pool({
-        connectionString: dbUrl,
-        ssl: {
-            rejectUnauthorized: false
-        }
-    });
-}
-
-
-pool.query('SELECT NOW() as now')
+db.query('SELECT NOW() as now')
     .then(res => console.log(res))
-    .catch(err => console.log(err, "OMG DIDNT WORK---------------------------------------------------------------"));
+    .catch(err => console.log(err, "OMG DIDNT WORK-----------------"));
 
 // pool.query('SELECT * FROM users;')
 //     .then(res => {
@@ -41,15 +20,15 @@ pool.query('SELECT NOW() as now')
 //     .catch(err => { console.log(err) })
 //     .finally(() => pool.end());
 
-app.use(express.static(path.resolve(__dirname, "../client/build")));
-app.use(express.json())
+server.use(express.static(path.resolve(__dirname, "../client/build")));
+server.use(express.json())
 
-app.post("/newavail", (req, res) => {
+server.post("/newavail", (req, res) => {
     console.log(req.body);
     res.status(200).send({msg: "Updated availability for user: " + req.body.userName})
 })
 
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+server.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 });
 
