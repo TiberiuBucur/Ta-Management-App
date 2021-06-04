@@ -11,7 +11,7 @@ function Postgre(pool) {
   };
   this.hasAvailability = async (username) => {
     const qresult = await pool.query("SELECT * FROM tas where username = $1", [username]);
-    return qresult.rows.length === 0;
+    return qresult.rows.length !== 0;
   };
   this.getUserRow = async (username) => {
     const qresult = await pool.query("SELECT * FROM tas WHERE username = $1", [username]);
