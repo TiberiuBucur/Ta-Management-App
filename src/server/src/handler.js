@@ -18,8 +18,8 @@ function Handler(db) {
     return Promise.resolve(`Availability for ${username} ${alreadyHad ? "overridden" : "set"}`);
   }
   this.getAvailability = async function(username) {
-    const qresult = await db.getUserRow(username);
-    return JSON.parse(qresult.availability);
+    const row = await db.getUserRow(username);
+    return JSON.parse(row.availability);
   }
 }
 

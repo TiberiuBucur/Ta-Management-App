@@ -6,20 +6,16 @@ function Postgre(pool) {
     this.setAvailability = async (username, availability) => {
         const isSet = await this.hasAvailability(username);
         const stringAvail = JSON.stringify(availability);
-        if (!isSet) {
-            return pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [username, stringAvail]);
-        } else {
-            return pool.query("UPDATE tas SET availability = '$1' WHERE username = '$2'", [stringAvail, username])
-        }
+        return isSet ? 
+            pool.query("UPDATE tas SET availability = $1 WHERE username = $2", [stringAvail, username])
+            : pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [username, stringAvail]);
     } 
-    this.hasAvailability = () => Promise.resolve(false)
+    this.hasAvailability = async () => Promise.resolve(false)
     this.getUserRow = async (username) => {
         const qresult = await pool.query("SELECT * FROM tas WHERE username = $1", [username]);
-        console.log(qresult);
         return qresult.rows[0];
     }
 }
-
 
 const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
