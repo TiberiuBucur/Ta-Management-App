@@ -11,6 +11,7 @@ const AvailSelect = () => {
 
 const Selection = () => {
   const [username, setUsername] = useState("");
+  const [msg, setMsg] = useState("");
   const [selection, setSelection] = useState({
     Mon: "None",
     Thu: "None",
@@ -37,7 +38,7 @@ const Selection = () => {
     });
     const body = await response.json();
 
-    console.log(body);
+    setMsg(body.msg);
   };
 
   return (
@@ -105,6 +106,7 @@ const Selection = () => {
         }}
       />
       <button onClick={handleSubmit}>SUBMIT</button>
+      <div>{msg}</div>
     </div>
   );
 };
