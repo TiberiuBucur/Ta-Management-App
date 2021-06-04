@@ -1,4 +1,5 @@
 const Handler = require("./handler");
+console.log("---- [HANDLER UNIT TESTS] ----")
 
 function MockDb(isSet=true) {
   this.cnt1 = 0;

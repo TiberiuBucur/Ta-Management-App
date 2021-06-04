@@ -7,15 +7,19 @@ const invalid = availability => {
 
 function Handler(db) {
   this.db = db;
-  this.submitAvailability = async function(usrname, availability) {
+  this.submitAvailability = async function(username, availability) {
     if (invalid(availability)) {
       return Promise.resolve("You cannot have the same preference for the same day")
     }
 
-    const alreadyHad = await this.db.hasAvailability(usrname)
-    await this.db.setAvailability(usrname, availability);
+    const alreadyHad = await this.db.hasAvailability(username)
+    await this.db.setAvailability(username, availability);
 
-    return Promise.resolve(`Availability for ${usrname} ${alreadyHad ? "overridden" : "set"}`);
+    return Promise.resolve(`Availability for ${username} ${alreadyHad ? "overridden" : "set"}`);
+  }
+  this.getAvailability = async function(username) {
+    const qresult = await db.getUserRow(username);
+    return JSON.parse(qresult.availability);
   }
 }
 
