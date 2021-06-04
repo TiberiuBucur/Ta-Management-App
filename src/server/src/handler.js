@@ -12,8 +12,8 @@ function Handler(db) {
       return Promise.resolve("You cannot have the same preference for the same day")
     }
 
-    const alreadyHad = await this.db.hasAvailability(username)
-    await this.db.setAvailability(username, availability);
+    const alreadyHad = await this.db.hasAvailability(username);
+    let r = await this.db.setAvailability(username, availability);
 
     return Promise.resolve(`Availability for ${username} ${alreadyHad ? "overridden" : "set"}`);
   }
