@@ -100,6 +100,7 @@ const Selection = () => {
       <br />
       <input
         type="text"
+        placeholder="username"
         value={username}
         onChange={(event) => {
           setUsername(event.currentTarget.value);
