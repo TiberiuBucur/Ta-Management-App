@@ -1,6 +1,6 @@
 // integration test
-const postgre = require("./db/postgre");
-const Handler = require("./src/handler");
+import postgre from "../db/postgre";
+import Handler from "./handler";
 
 const handler = new Handler(postgre);
 

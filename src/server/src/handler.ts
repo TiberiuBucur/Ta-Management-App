@@ -23,4 +23,4 @@ function Handler(db) {
   }
 }
 
-module.exports = Handler;
+export default Handler

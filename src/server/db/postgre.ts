@@ -1,4 +1,5 @@
-const { Pool } = require("pg");
+import { Pool } from "pg";
+
 const tableName = "tas";
 
 function Postgre(pool) {
@@ -21,6 +22,7 @@ function Postgre(pool) {
 
 const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
+
 const pool = prodMode
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
@@ -36,4 +38,6 @@ const pool = prodMode
       port: 5432,
     });
 
-module.exports = new Postgre(pool);
+const postgre = new Postgre(pool);
+
+export default postgre

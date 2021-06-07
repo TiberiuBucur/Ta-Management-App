@@ -1,19 +1,20 @@
-const path = require("path");
-const express = require("express");
-const Handler = require("./src/handler");
-const postgre = require("./db/postgre");
+import express from "express";
+import path from "path";
+import Handler from "./handler";
+import postgre from "../db/postgre";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
 
-server.use(express.static(path.resolve(__dirname, "../client/build")));
+const pathToStaticContent = path.resolve(__dirname, "../build");
+console.log(pathToStaticContent);
+
+server.use(express.static(pathToStaticContent));
 server.use(express.json());
 
 const handler = new Handler(postgre);
 
 server.post("/newavail/:username", async (req, res) => {
-  console.log(req);
-
   const { username } = req.params;
   const availability = req.body;
   const msg = await handler.submitAvailability(username, availability);
