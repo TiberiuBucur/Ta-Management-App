@@ -1,13 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const AvailSelect = () => {
+interface Props {
+  shortCode: string;
+}
+
+const TA = ({shortCode}: Props) => {
   return (
     <div>
+      <header>{shortCode}</header>
+      <Schedule shortCode={shortCode} />
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <Intro />
       <Selection />
     </div>
   );
 };
+
+const Schedule = (props: {shortCode: string}) => {
+  const [slots, setSlots] = useState(undefined);
+
+  const fetchSlots = async () => {
+    const response = await fetch(`/schedule/${props.shortCode}`, {
+      method: "GET",
+      mode: "same-origin",
+      cache: "no-cache"
+    });
+
+    const recvSlots = await response.json();
+
+    setSlots(recvSlots)
+  }
+
+  useEffect(() => {
+    fetchSlots();
+  }, []);
+  
+  return (
+    <div>
+      {slots === undefined ? <div>Loading slots...</div> : <div>{slots}</div> }
+    </div>
+  )
+}
 
 const Selection = () => {
   const [username, setUsername] = useState("");
@@ -127,4 +163,4 @@ const Intro = () => {
   );
 };
 
-export default AvailSelect;
+export default TA;

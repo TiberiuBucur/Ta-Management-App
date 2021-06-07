@@ -1,24 +1,45 @@
-import React from 'react';
-import AvailSelect from "./ta/AvailSelect"
-import './App.css';
+import React, { useState } from "react";
+import Login from "./login/Login";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
+import TA from "./ta/TA";
+import Coord from "./coord/Coord"
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <AvailSelect />
-    </div>
-  );
-}
+  const [shortCode, setShortCode] = useState("");
+  
+  const isLoggedIn = shortCode !== "";
+  const isCoord = false;
 
-const Header = () => {
   return (
-    <header>
-      <div style={{backgroundColor: "grey", color: "white"}}>
-        username@ic.ac.uk
+    <Router>
+      <div className="App">
+        <Redirect to={isLoggedIn ? "/dash" : "/login"} />
+        <Route
+          path="/login"
+          component={() => (
+            <Login setShortCode={setShortCode} />
+          )}
+        />
+        <Route
+          path="/dash"
+          component={() =>
+            isCoord ? (
+              <Coord shortCode={shortCode} />
+            ) : (
+              <TA shortCode={shortCode} />
+            )
+          }
+        />
       </div>
-    </header>
-  )
+    </Router>
+  );
 }
 
 export default App;
