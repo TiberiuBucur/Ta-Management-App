@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Redirect } from "react-router";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
 
