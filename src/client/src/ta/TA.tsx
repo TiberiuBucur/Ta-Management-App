@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, Route} from "react-router-dom"
+import {Link, Redirect, Route} from "react-router-dom"
 import Schedule from "./Schedule"
 import Availabilities from "./Availabilities"
 import "./TA.css";
@@ -9,9 +9,12 @@ interface Props {
 }
 
 const TA = ({ shortCode }: Props) => {
+  shortCode = shortCode || "username";
+  
   return (
     <div className="ta-page">
       <Header shortCode={shortCode}/>
+      <Redirect to="/dash" />
       <Route path="/dash" component={() => <Schedule shortCode={shortCode} />} />
       <Route path="/availabilities" component={() => <Availabilities shortCode={shortCode} />} />
     </div>

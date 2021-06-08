@@ -9,6 +9,9 @@
 
   color: white;
   padding: 0 50px;
+  top:0;
+  left: 0;
+  position: sticky;
 }
 
 .ta-page .schedule {
@@ -20,8 +23,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
 
-  height: 650px;
-  overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 .ta-page .schedule .session {
@@ -30,7 +32,7 @@
   margin: 10px 0;
 }
 
-.ta-page .schedule .next-session {
+.ta-page .schedule #next-session {
   border-color: orange;
   border-width: 3.5px;
   border-style: solid;
