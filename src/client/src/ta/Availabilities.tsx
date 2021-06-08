@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-
-const AvailSelect = () => {
-  return (
-    <div>
-      <Intro />
-      <Selection />
-    </div>
-  );
-};
-
-const Selection = () => {
+const Availabilities = ({shortCode} : {shortCode: string}) => {
   const [username, setUsername] = useState("");
   const [msg, setMsg] = useState("");
   const [selection, setSelection] = useState({
@@ -43,6 +33,7 @@ const Selection = () => {
 
   return (
     <div>
+      <Intro />
       <ul>
         <li>
           Mon:
@@ -127,4 +118,4 @@ const Intro = () => {
   );
 };
 
-export default AvailSelect;
+export default Availabilities
