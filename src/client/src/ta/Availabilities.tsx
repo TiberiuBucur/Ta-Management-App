@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 const Availabilities = ({shortCode} : {shortCode: string}) => {
   const [username, setUsername] = useState("");
   const [msg, setMsg] = useState("");
