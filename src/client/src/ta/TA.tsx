@@ -44,7 +44,8 @@ const Schedule = (props: {shortCode: string}) => {
   return (
     <div className="ta-page">
       <div className="schedule">
-        {slots === [] ? "Loading slots..." : slots.map(slot => <SlotBox slot={slot} />) }
+        {slots === [] ? "Loading slots..." : 
+          slots.map(slot => <SlotBox slot={slot} key={slot.id}/>) }
       </div>
     </div>
   )

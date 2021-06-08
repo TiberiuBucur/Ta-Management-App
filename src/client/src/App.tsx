@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from "react-router-dom";
 import TA from "./ta/TA";
@@ -21,22 +20,24 @@ function App() {
     <Router>
       <div className="App">
         <Redirect to={isLoggedIn ? "/dash" : "/login"} />
-        <Route
-          path="/login"
-          component={() => (
-            <Login setShortCode={setShortCode} />
-          )}
-        />
-        <Route
-          path="/dash"
-          component={() =>
-            isCoord ? (
-              <Coord shortCode={shortCode} />
-            ) : (
-              <TA shortCode={shortCode} />
-            )
-          }
-        />
+        <Switch>
+          <Route
+            path="/login"
+            component={() => (
+              <Login setShortCode={setShortCode} />
+            )}
+          />
+          <Route
+            path="/dash"
+            component={() =>
+              isCoord ? (
+                <Coord shortCode={shortCode} />
+              ) : (
+                <TA shortCode={shortCode} />
+              )
+            }
+          />
+        </Switch>
       </div>
     </Router>
   );

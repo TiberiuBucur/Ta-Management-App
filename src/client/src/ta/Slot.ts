@@ -1,5 +1,3 @@
-import React from "react-dom"
-
 type SlotAssignment = number | "backup" | "none"
 
 type SlotStatus = "unavailable" | "assigned" | "claimed" | "missed" | "confirmed"
