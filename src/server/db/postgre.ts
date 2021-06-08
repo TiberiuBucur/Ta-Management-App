@@ -24,20 +24,41 @@ class Postgre {
     return qresult.rows.length !== 0;
   }
 
-  public async getAvailability(shortcode: string): Promise<any | null> {
+  public async getAvailability(shortcode: string): Promise<[any[] | null, object | null]> {
     const q = `SELECT * FROM ${tasScheduleTable} WHERE shortcode = '${shortcode}';`
     console.log(`query: ${q}`);
     return pool.query(`SELECT * FROM ${tasScheduleTable} WHERE shortcode = '${shortcode}';`)
     .then(res => { 
-      if (!res || !(res.rows)) {
-          return null;
+      if (!res || !(res.rows) || res.rows.length === 0) {
+          return [null, null];
       }
+      let nextSession: Date | null = null; 
+      let closestTime = -1;
+      const now = Date.now();
       res.rows.forEach(slot => {
           const date = new Date(slot.time);
+          if (!nextSession) {
+            nextSession = date;
+          } else { 
+            const diff = nextSession.getTime() - now;
+            if (diff > closestTime) {
+              closestTime = diff;
+              nextSession = date;
+            }
+          }
+
           slot.date = { day: date.getDate(), month: date.getUTCMonth() + 1, year: date.getUTCFullYear() };
+          if (!(slot.assignment === "backup" || slot.assignment === "none")) {
+            // the assignment is a number
+            slot.assignment = Number(slot.assignment);
+          }
           delete slot.time; 
       });
-      return res.rows;
+      let nextSess: object | null = null;
+      if (closestTime !== -1) {
+        nextSess = { day: nextSession.getUTCDate(), month: nextSession.getUTCMonth() + 1, year: nextSession.getUTCFullYear() };
+      }
+      return [res.rows, nextSess];
     });
   }
 

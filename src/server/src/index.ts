@@ -24,8 +24,14 @@ server.post("/newavail/:username", async (req, res) => {
 server.get("/schedule/:shortcode", async (req, res) => {
   const { shortcode } = req.params;
   try {
-    const avails: any = await postgre.getAvailability(shortcode);
-    res.status(200).json({ avails });
+    // TODO: change any to a concrete type after merging with frontend (type defined on FE)
+    const [avails, nextSession] = await postgre.getAvailability(shortcode);
+    if (!avails || avails.length === 0) {
+      res.status(200).json(200).json({ shortcode: shortcode, slots: [] });
+      return;
+    }
+    const term = avails[0].term;
+    res.status(200).json({ shortcode: shortcode, term: term, nextsession: nextSession, slots: avails });
   }
   catch (err) { console.log(err) };
 
