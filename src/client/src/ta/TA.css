@@ -1,3 +1,16 @@
+.ta-page header {
+  background-color: var(--color-dark-grey);
+  height: 50px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  color: white;
+  padding: 0 50px;
+}
+
 .ta-page .schedule {
   background-color: var(--color-light-grey);
 
@@ -13,7 +26,7 @@
 
 .ta-page .schedule .session {
   width: 28%;
-  min-width: 320px;
+  min-width: 330px;
   margin: 10px 0;
 }
 

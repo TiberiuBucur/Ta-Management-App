@@ -1,9 +1,10 @@
 :root {
   --color-light-grey: #f5f4f4;
-  --color-light-green: #9cecbe;
-  --color-light-red: #e99797;
-  --color-grey: #c8c8c8;
-  --color-light-violet: #cf93eb;
+  --color-light-green: hsl(145, 60%, 60%);
+  --color-light-red: hsl(5, 60%, 60%);
+  --color-grey: hsl(0, 0%, 60%);
+  --color-light-violet: hsl(290, 60%, 60%);
+  --color-dark-grey: #2f363a;
 }
 
 .bolden {

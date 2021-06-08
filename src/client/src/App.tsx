@@ -19,7 +19,8 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Redirect to={isLoggedIn ? "/dash" : "/login"} />
+        {/* <Login setShortCode={setShortCode} /> */}
+        <Redirect to={isLoggedIn ? "/" : "/login"} />
         <Switch>
           <Route
             path="/login"
@@ -28,7 +29,7 @@ function App() {
             )}
           />
           <Route
-            path="/dash"
+            path="/"
             component={() =>
               isCoord ? (
                 <Coord shortCode={shortCode} />
