@@ -7,6 +7,7 @@ const server = express();
 const PORT = process.env.PORT || 5000;
 
 const pathToStaticContent = path.resolve(__dirname, "../build");
+const pathToRedirect = path.resolve(__dirname, "../build/redirect.html");
 console.log(pathToStaticContent);
 
 server.use(express.static(pathToStaticContent));
@@ -43,6 +44,11 @@ server.get("/allavailabilities", async (_req, res) => {
 
   res.status(200).json({ rows })
 });
+
+server.get("*", (req, res) => {
+  res.sendFile(pathToRedirect);
+  
+})
 
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
