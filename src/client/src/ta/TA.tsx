@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Slot, {slotFromJson, slots as sampleSlots} from "./Slot"
+import SlotBox from "./SlotBox"
+import "./TA.css"
 
 interface Props {
   shortCode: string;
@@ -20,18 +23,18 @@ const TA = ({shortCode}: Props) => {
 };
 
 const Schedule = (props: {shortCode: string}) => {
-  const [slots, setSlots] = useState(undefined);
+  const [slots, setSlots] = useState<Slot[]>([]);
 
   const fetchSlots = async () => {
-    const response = await fetch(`/schedule/${props.shortCode}`, {
-      method: "GET",
-      mode: "same-origin",
-      cache: "no-cache"
-    });
+    // const response = await fetch(`/schedule/${props.shortCode}`, {
+    //   method: "GET",
+    //   mode: "same-origin",
+    //   cache: "no-cache"
+    // });
 
-    const recvSlots = await response.json();
+    const data = sampleSlots; // await response.json();
 
-    setSlots(recvSlots)
+    setSlots(data.avails.map(slotFromJson));
   }
 
   useEffect(() => {
@@ -39,8 +42,10 @@ const Schedule = (props: {shortCode: string}) => {
   }, []);
   
   return (
-    <div>
-      {slots === undefined ? <div>Loading slots...</div> : <div>{slots}</div> }
+    <div className="ta-page">
+      <div className="schedule">
+        {slots === [] ? "Loading slots..." : slots.map(slot => <SlotBox slot={slot} />) }
+      </div>
     </div>
   )
 }
