@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import Handler from "./handler";
-import postgre from "../db/postgre";
+import { postgre } from "../db/postgre";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -21,7 +21,23 @@ server.post("/newavail/:username", async (req, res) => {
   res.status(200).send({ msg });
 });
 
-server.get("/allavailabilities", async (req, res) => {
+server.get("/schedule/:shortcode", async (req, res) => {
+  const { shortcode } = req.params;
+  try {
+    // TODO: change any to a concrete type after merging with frontend (type defined on FE)
+    const [avails, nextSession] = await postgre.getAvailability(shortcode);
+    if (!avails || avails.length === 0) {
+      res.status(200).json(200).json({ shortcode: shortcode, slots: [] });
+      return;
+    }
+    const term = avails[0].term;
+    res.status(200).json({ shortcode: shortcode, term: term, nextsession: nextSession, slots: avails });
+  }
+  catch (err) { console.log(err) };
+
+});
+
+server.get("/allavailabilities", async (_req, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
 
