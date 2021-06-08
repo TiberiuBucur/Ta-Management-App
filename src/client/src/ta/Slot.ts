@@ -297,6 +297,93 @@ export const slots = {
         year: 2021
       }
     },
+    {
+      slot_id: 19,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Monday",
+      start_hour: "11:00",
+      end_hour: "12:00",
+      status: "assigned",
+      assigned: 3,
+      date: {
+        day: 7,
+        month: 6,
+        year: 2021
+      }
+    },
+    {
+      slot_id: 20,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Monday",
+      start_hour: "12:00",
+      end_hour: "13:00",
+      status: "assigned",
+      assigned: 3,
+      date: {
+        day: 7,
+        month: 6,
+        year: 2021
+      }
+    },
+    {
+      slot_id: 21,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Thursday",
+      start_hour: "11:00",
+      end_hour: "12:00",
+      status: "assigned",
+      date: {
+        day: 10,
+        month: 6,
+        year: 2021
+      }
+    },
+    {
+      slot_id: 22,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Thursday",
+      start_hour: "12:00",
+      end_hour: "13:00",
+      status: "assigned",
+      date: {
+        day: 10,
+        month: 6,
+        year: 2021
+      }
+    },
+    
+    {
+      slot_id: 23,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Friday",
+      start_hour: "11:00",
+      end_hour: "12:00",
+      status: "unavailable",
+      date: {
+        day: 11,
+        month: 6,
+        year: 2021
+      }
+    },
+    {
+      slot_id: 24,
+      shortcode: "tcb19",
+      term: 3,
+      day: "Friday",
+      start_hour: "12:00",
+      end_hour: "13:00",
+      status: "unavailable",
+      date: {
+        day: 11,
+        month: 6,
+        year: 2021
+      }
+    },
   ]
 }
 

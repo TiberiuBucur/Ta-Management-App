@@ -1,9 +1,12 @@
 :root {
   --color-light-grey: #f5f4f4;
-  --color-light-green: hsl(145, 45%, 60%);
+  /* --color-light-green: hsl(145, 45%, 60%);
   --color-light-red: hsl(5, 45%, 60%);
-  --color-grey: hsl(0, 0%, 60%);
-  --color-light-violet: hsl(290, 45%, 60%);
+  --color-light-violet: hsl(290, 45%, 60%); */
+  --color-light-red: hsl(25, 50%, 50%);
+  --color-light-green: hsl(100, 50%, 50%);
+  --color-light-violet: hsl(50, 50%, 50%);
+  --color-grey: hsl(0, 0%, 50%);
   --color-dark-grey: #2f363a;
 }
 

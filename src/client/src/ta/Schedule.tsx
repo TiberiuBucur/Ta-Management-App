@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Redirect } from "react-router";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
 
@@ -11,6 +12,13 @@ const groupByDay = (slots: Slot[]): Slot[][] => {
 };
 
 const Schedule = (props: { shortCode: string }) => {
+  const nextSessionRef = useRef<HTMLSpanElement>(null);
+  const scrollToNext = () => {
+    if (nextSessionRef.current) {
+      nextSessionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+  
   const [slots, setSlots] = useState<Slot[]>([]);
   const nextSessionId = 15;
 
@@ -19,7 +27,7 @@ const Schedule = (props: { shortCode: string }) => {
     //   method: "GET",
     //   mode: "same-origin",
     //   cache: "no-cache"
-    // });
+    // }).then(res => console.log(res));
 
     const data = sampleSlots; // await response.json();
 
@@ -28,25 +36,29 @@ const Schedule = (props: { shortCode: string }) => {
 
   useEffect(() => {
     fetchSlots();
+    setTimeout(scrollToNext, 1000);
   }, []);
 
   return (
     <div className="schedule">
       {slots === []
         ? "Loading slots..."
-        : groupByDay(slots).map(([slot1, slot2]) => (
-            <div
-              className={`session ${
-                slot1.id === nextSessionId ? "next-session" : ""
-              }`}
-              key={slot1.id}
-            >
-              <SlotBox slot={slot1} />
-              <SlotBox slot={slot2} />
-            </div>
-          ))}
+        : groupByDay(slots).map(([slot1, slot2]) => {
+            const isNext = slot1.id === nextSessionId;
+            return (
+              <div
+                className="session"
+                id={isNext ? "next-session" : ""}
+                key={slot1.id}
+              >
+                {isNext ? <span ref={nextSessionRef}></span> : undefined}
+                <SlotBox slot={slot1} />
+                <SlotBox slot={slot2} />
+              </div>
+            );
+          })}
     </div>
   );
 };
 
-export default Schedule
+export default Schedule;
