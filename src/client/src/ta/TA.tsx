@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from "react";
-import Slot, {slotFromJson, slots as sampleSlots} from "./Slot"
-import SlotBox from "./SlotBox"
-import "./TA.css"
+import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
+import SlotBox from "./SlotBox";
+import "./TA.css";
 
 interface Props {
   shortCode: string;
 }
 
-const TA = ({shortCode}: Props) => {
+const groupByDay = (slots: Slot[]): Slot[][] => {
+  const res = [];
+  for (let i = 0; i < slots.length - 1; i += 2) {
+    res.push([slots[i], slots[i + 1]]);
+  }
+  return res;
+};
+
+const TA = ({ shortCode }: Props) => {
   return (
     <div>
       <header>{shortCode}</header>
       <Schedule shortCode={shortCode} />
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
+      <br />
       <Intro />
       <Selection />
     </div>
   );
 };
 
-const Schedule = (props: {shortCode: string}) => {
+const Schedule = (props: { shortCode: string }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
+  const nextSessionId = 15;
 
   const fetchSlots = async () => {
     // const response = await fetch(`/schedule/${props.shortCode}`, {
@@ -35,21 +44,32 @@ const Schedule = (props: {shortCode: string}) => {
     const data = sampleSlots; // await response.json();
 
     setSlots(data.avails.map(slotFromJson));
-  }
+  };
 
   useEffect(() => {
     fetchSlots();
   }, []);
-  
+
   return (
     <div className="ta-page">
       <div className="schedule">
-        {slots === [] ? "Loading slots..." : 
-          slots.map(slot => <SlotBox slot={slot} key={slot.id}/>) }
+        {slots === []
+          ? "Loading slots..."
+          : groupByDay(slots).map(([slot1, slot2]) => (
+              <div
+                className={`session ${
+                  slot1.id === nextSessionId ? "next-session" : ""
+                }`}
+                key={slot1.id}
+              >
+                <SlotBox slot={slot1} />
+                <SlotBox slot={slot2} />
+              </div>
+            ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Selection = () => {
   const [username, setUsername] = useState("");

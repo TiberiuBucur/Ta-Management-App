@@ -5,3 +5,7 @@
   --color-grey: #c8c8c8;
   --color-light-violet: #cf93eb;
 }
+
+.bolden {
+  font-weight: bold;
+}

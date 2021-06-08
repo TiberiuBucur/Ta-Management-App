@@ -1,4 +1,25 @@
 .ta-page .schedule {
   background-color: var(--color-light-grey);
-  padding: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  height: 650px;
+  overflow-y: scroll;
+}
+
+.ta-page .schedule .session {
+  width: 28%;
+  min-width: 320px;
+  margin: 10px 0;
+}
+
+.ta-page .schedule .next-session {
+  border-color: orange;
+  border-width: 3.5px;
+  border-style: solid;
+  border-radius: 5px;
 }
