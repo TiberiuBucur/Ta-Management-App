@@ -3,7 +3,7 @@ import { Slot } from "../Slot";
 
 // Only to be used when first instantiating the mock ta_schedule for the first time
 // on a new platform
-import { createAllTables, mockDataForTables } from "./initsAndMocks";
+import { mockDataForTables } from "./initsAndMocks";
 
 
 const prodMode = process.env.DATABASE_URL !== undefined;
@@ -11,6 +11,8 @@ console.log(`PRODUCTION MODE: ${prodMode}`);
 
 export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
 export const LAB_SLOTS_TABLE: string = "lab_slots";
+export const TAS_TABLE: string = "tas_table";
+
 
 class Postgre {
 
@@ -90,15 +92,28 @@ class Postgre {
 
   public async setSessions(slots: Slot[]) {
     // Clears old sessions from database. TODO: change this if necessary
+    await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE}`);
     await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
 
-    slots.forEach(async (slot: Slot) => {
+    for (const slot of slots) {
       const { date, startH, endH, term } = slot;
+      // TODO: check if date.getDate() works here. (it doesn't)
       await pool.query(
         `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4)`,
-        [`${date.year}-${date.month}-${date.day}`, startH, endH, term]
+        [`${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`, startH, endH, term]
       );
-    });
+    }
+  }
+
+  public async getLabSlotsIds(): Promise<any> {
+    try {
+      const res = await pool.query(`SELECT id FROM lab_slots`);
+      return res.rows;
+    } catch (err) {
+      console.log(err);
+    }
+
+    return [];
   }
 }
 
@@ -120,5 +135,6 @@ const pool: Pool = prodMode
 
 const postgre = new Postgre(pool);
 
+mockDataForTables();
 
 export { postgre, pool };

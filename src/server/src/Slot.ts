@@ -6,11 +6,7 @@ export type Slot = {
   term: number;
   startH: string;
   endH: string;
-  date: {
-    day: number;
-    month: number;
-    year: number;
-  };
+  date: Date;
 }
 
 export const slotFromJson = (json: any): Slot => {
@@ -20,10 +16,6 @@ export const slotFromJson = (json: any): Slot => {
     term: term as number,
     startH: start_hour as string,
     endH: end_hour as string,
-    date: {
-      day: date.day as number,
-      month: date.month as number,
-      year: date.year as number
-    }
+    date: date as Date
   }
 }
