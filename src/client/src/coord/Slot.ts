@@ -1,3 +1,5 @@
+import { moveSyntheticComments } from "typescript";
+
 type Slot = {
   day: string;
   startH: string;
@@ -12,7 +14,7 @@ type Date = {
 };
 
 
-const compDates = (d1: Date, d2: Date): number => {
+export const compDates = (d1: Date, d2: Date): number => {
   if (d1.year < d2.year) return -1;
   if (d1.year > d2.year) return 1;
   if (d1.month < d2.month) return -1;
@@ -28,6 +30,25 @@ export const cmpSlots = (s1: Slot, s2: Slot): number => {
   if (datesCmp !== 0) return datesCmp;
   const startHCmp = s1.startH < s2.startH;
   return startHCmp ? -1 : 1;
+}
+
+const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+export const nextWeek = (date: Date): Date => {
+  let newDay = date.day + 7;
+  let newMonth = date.month;
+  let newYear = date.year;
+  if (newDay > daysPerMonth[date.month]) {
+    newDay -= daysPerMonth[date.month];
+    newMonth = (date.month + 1) % 12;
+    if (date.month == 12)
+      newYear++;
+  }
+  return {
+    day: newDay,
+    month: newMonth,
+    year: newYear
+  }
 }
 
 // export const mkKey = (slot: Slot): string => JSON.stringify

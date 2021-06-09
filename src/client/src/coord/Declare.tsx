@@ -1,9 +1,30 @@
 import React, { useState } from "react"
-import Slot, {cmpSlots, sample, prettyDate} from "./Slot";
+import Slot, {cmpSlots, sample, prettyDate, nextWeek} from "./Slot";
 import "./Declare.css"
 
+const termEnd = {
+  day: 25,
+  month: 6,
+  year: 2021
+}
+
 const mkSlots = (day: string, startH: number, recurring: boolean): Slot[] => {
-  return []; // TODO;
+  var newSlots = [];
+  var i = 0;
+  const dummyDate = {
+    day: 7,
+    month: 6,
+    year: 2021
+  }
+
+  for (let date = dummyDate; compDates(date, termEnd) <= 0; date = nextWeek(date)) {
+    newSlots[i] = {
+      day: date,
+      startH: String(startH),
+      endH: String (startH + 1),
+      
+    }
+  }
 }
 
 const Declare = () => {
