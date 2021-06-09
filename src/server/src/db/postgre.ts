@@ -3,14 +3,14 @@ import { Slot } from "../Slot";
 
 // Only to be used when first instantiating the mock ta_schedule for the first time
 // on a new platform
-import { createMockTAScheduleData } from "./mocktaSchedule";
+import { createAllTables, mockDataForTables } from "./initsAndMocks";
 
 
 const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
 
-const tasScheduleTable: string = "tas_schedule";
-const labSlotsTable: string = "lab_slots";
+export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
+export const LAB_SLOTS_TABLE: string = "lab_slots";
 
 class Postgre {
 
@@ -33,10 +33,10 @@ class Postgre {
   }
 
   public async getAvailability(shortcode: string): Promise<[any[] | null, object | null]> {
-    const q = `SELECT * FROM ${tasScheduleTable} WHERE shortcode = '${shortcode}';`
+    const q = `SELECT * FROM ${TAS_SCHEDULE_TABLE} WHERE shortcode = '${shortcode}';`
     console.log(`query: ${q}`);
 
-    return pool.query(`SELECT * FROM ${tasScheduleTable} WHERE shortcode = '${shortcode}';`)
+    return pool.query(`SELECT * FROM ${TAS_SCHEDULE_TABLE} WHERE shortcode = '${shortcode}';`)
       .then(res => {
         if (!res || !(res.rows) || res.rows.length === 0) {
           return [null, null];
@@ -90,12 +90,12 @@ class Postgre {
 
   public async setSessions(slots: Slot[]) {
     // Clears old sessions from database. TODO: change this if necessary
-    await pool.query(`DELETE FROM ${labSlotsTable}`);
+    await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
 
     slots.forEach(async (slot: Slot) => {
       const { date, startH, endH, term } = slot;
       await pool.query(
-        `INSERT INTO ${labSlotsTable} (date, startH, endH, term) VALUES($1, $2, $3, $4)`,
+        `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4)`,
         [`${date.year}-${date.month}-${date.day}`, startH, endH, term]
       );
     });
