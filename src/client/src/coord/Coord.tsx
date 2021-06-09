@@ -8,7 +8,7 @@ type Props = {
   shortCode: string;
 }
 
-const Coord = ({shortCode}: {shortCode: string}) => {
+const Coord = ({shortCode}: Props) => {
   return (
     <div className="coord-page">
       <Header shortCode={shortCode} />
