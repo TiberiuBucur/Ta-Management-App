@@ -93,11 +93,10 @@ class Postgre {
     await pool.query(`DELETE FROM ${labSlotsTable}`);
 
     slots.forEach(async (slot: Slot) => {
-      const { date, startH, endH } = slot;
+      const { date, startH, endH, term } = slot;
       await pool.query(
-        // Doamne ajuta
-        `INSERT INTO ${labSlotsTable} (date, startH, endH) VALUES('$1', '$2', '$3')`,
-        [date, startH, endH]
+        `INSERT INTO ${labSlotsTable} (date, startH, endH, term) VALUES($1, $2, $3, $4)`,
+        [`${date.year}-${date.month}-${date.day}`, startH, endH, term]
       );
     });
   }
