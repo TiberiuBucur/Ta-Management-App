@@ -21,37 +21,25 @@ const mkSlots = (
   recurring: boolean
 ): Slot[] => {
   const date = new Date(dateStr);
-  const res: Slot[] = [
-    {
-      day: weekDays[date.getDay() - 1],
-      startH: `${startH}:00`,
-      endH: `${startH + 1}:00`,
-      date: {
-        day: date.getUTCDate(),
-        month: date.getMonth() + 1,
-        year: date.getUTCFullYear(),
-      },
-    },
-  ];
+  const res: Slot[] = [];
 
-  if (recurring) {
-    console.log('RECURRING')
-    new Array(9).fill(undefined).forEach(ignored => {
-      date.setDate(date.getDate() + 7);
-      res.push(
-        {
-          day: weekDays[date.getDay() - 1],
-          startH: `${startH}:00`,
-          endH: `${startH + 1}:00`,
-          date: {
-            day: date.getUTCDate(),
-            month: date.getMonth() + 1,
-            year: date.getUTCFullYear(),
-          },
-        }
-      )
-    })
-  }
+  const noSlots = recurring ? 10 : 1;
+  console.log('RECURRING')
+  new Array(noSlots).fill(undefined).forEach(ignored => {
+    res.push(
+      {
+        day: weekDays[date.getDay() - 1],
+        startH: `${startH}:00`,
+        endH: `${startH + 1}:00`,
+        date: {
+          day: date.getUTCDate(),
+          month: date.getMonth() + 1,
+          year: date.getUTCFullYear(),
+        },
+      }
+    )
+    date.setDate(date.getDate() + 7);
+  })
 
   console.log(res);
   return res;
@@ -103,7 +91,7 @@ const Declare = () => {
       <div className="session-selector">
         <div className="selection">
           Start hour:
-          <input
+          <input className="start-hour-input"
             type="text"
             placeholder="from 9 to 16"
             value={startH}
@@ -127,7 +115,7 @@ const Declare = () => {
         </button>
       </div>
       <div className="sessions-view">
-        {slots.sort(cmpSlots).map(SlotRow)}
+        {slots.length !== 0 ? slots.sort(cmpSlots).map(SlotRow) : <div className="slot-row"> Insert the lab session slots for this term </div>}
         <button className="submit-bttn">SUBMIT</button>
       </div>
     </div>

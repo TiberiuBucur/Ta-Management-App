@@ -12,6 +12,11 @@
   margin-left: 5px;
 }
 
+.declare .session-selector .selection .start-hour-input {
+  width: 30px;
+  text-align: center;
+}
+
 .declare .sessions-view {
   width: 650px;
 }
@@ -43,4 +48,5 @@
 .declare .sessions-view .submit-bttn {
   margin-top: 25px;
   float: right;
+  margin-bottom: 20px;
 }
