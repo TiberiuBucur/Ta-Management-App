@@ -11,7 +11,6 @@ type Date = {
   year: number;
 };
 
-
 const compDates = (d1: Date, d2: Date): number => {
   if (d1.year < d2.year) return -1;
   if (d1.year > d2.year) return 1;

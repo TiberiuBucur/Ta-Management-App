@@ -24,7 +24,6 @@ const mkSlots = (
   const res: Slot[] = [];
 
   const noSlots = recurring ? 10 : 1;
-  console.log('RECURRING')
   new Array(noSlots).fill(undefined).forEach(ignored => {
     res.push(
       {
@@ -41,7 +40,6 @@ const mkSlots = (
     date.setDate(date.getDate() + 7);
   })
 
-  console.log(res);
   return res;
 };
 
@@ -106,7 +104,7 @@ const Declare = () => {
           Recurring?
           <input
             type="checkbox"
-            onChange={(e) => {console.log(isRec); setIsRec((prev) => !prev)}}
+            onChange={(e) => {setIsRec((prev) => !prev)}}
             checked={isRec}
           />
         </div>

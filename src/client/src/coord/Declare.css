@@ -12,6 +12,10 @@
   margin-left: 5px;
 }
 
+.declare .session-selector .add-bttn {
+  background-color: var(--color-blue);
+}
+
 .declare .session-selector .selection .start-hour-input {
   width: 30px;
   text-align: center;
@@ -39,14 +43,19 @@
 
 .declare .slot-row .remove-bttn {
   margin-left: 20px;
+  background-color: var(--color-red);
 }
 
 .declare button {
-  padding: 5px;
+  padding: 7px 10px;
+  outline: none;
+  border: none;
+  color: white;
 }
 
 .declare .sessions-view .submit-bttn {
   margin-top: 25px;
   float: right;
   margin-bottom: 20px;
+  background-color: var(--color-light-violet);
 }

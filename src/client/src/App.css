@@ -7,11 +7,17 @@
   --color-light-green: hsl(100, 50%, 50%);
   --color-light-violet: hsl(50, 50%, 50%);
   --color-grey: hsl(0, 0%, 50%);
+  --color-red: hsl(7, 50%, 50%);
+  --color-blue: hsl(212, 50%, 50%);
   --color-dark-grey: #2f363a;
 }
 
 .bolden {
   font-weight: bold;
+}
+
+button {
+  cursor: pointer;
 }
 
 header {
