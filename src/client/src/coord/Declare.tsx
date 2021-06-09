@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Slot, {
   cmpSlots,
-  compDates,
   prettyDate,
 } from "./Slot";
 import "./Declare.css";

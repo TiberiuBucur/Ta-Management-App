@@ -12,7 +12,7 @@ type Date = {
 };
 
 
-export const compDates = (d1: Date, d2: Date): number => {
+const compDates = (d1: Date, d2: Date): number => {
   if (d1.year < d2.year) return -1;
   if (d1.year > d2.year) return 1;
   if (d1.month < d2.month) return -1;
