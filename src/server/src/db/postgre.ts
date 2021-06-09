@@ -1,10 +1,6 @@
 import { Pool } from "pg";
 import { Slot } from "../Slot";
 
-// Only to be used when first instantiating the mock ta_schedule for the first time
-// on a new platform
-import { mockDataForTables } from "./initsAndMocks";
-
 
 const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
@@ -134,7 +130,5 @@ const pool: Pool = prodMode
   });
 
 const postgre = new Postgre(pool);
-
-mockDataForTables();
 
 export { postgre, pool };
