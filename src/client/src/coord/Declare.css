@@ -1,0 +1,18 @@
+.declare .sessions-view {
+  width: 600px;
+}
+
+.declare .slot-row {
+  margin: 15px 0;
+
+  display: flex;
+  justify-content: space-around;
+}
+
+.declare .slot-row .property {
+  width: 140px;
+}
+
+.declare .slot-row .remove-bttn {
+  margin-left: 20px;
+}

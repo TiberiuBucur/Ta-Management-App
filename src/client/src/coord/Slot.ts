@@ -30,4 +30,71 @@ export const cmpSlots = (s1: Slot, s2: Slot): number => {
   return startHCmp ? -1 : 1;
 }
 
+// export const mkKey = (slot: Slot): string => JSON.stringify
+
+export const prettyDate = (date: Date): string => `${date.day}/${date.month}`
+
+export const sample: Slot[] = [
+  {
+    day: "Friday",
+    startH: "11:00",
+    endH: "12:00",
+    date: {
+      day: 11,
+      month: 6,
+      year: 2021
+    }
+  },
+  {
+    day: "Friday",
+    startH: "12:00",
+    endH: "13:00",
+    date: {
+      day: 11,
+      month: 6,
+      year: 2021
+    }
+  },
+  {
+    day: "Monday",
+    startH: "12:00",
+    endH: "13:00",
+    date: {
+      day: 7,
+      month: 6,
+      year: 2021
+    }
+  },
+  {
+    day: "Monday",
+    startH: "11:00",
+    endH: "12:00",
+    date: {
+      day: 7,
+      month: 6,
+      year: 2021
+    }
+  },
+  {
+    day: "Thursday",
+    startH: "11:00",
+    endH: "12:00",
+    date: {
+      day: 10,
+      month: 6,
+      year: 2021
+    }
+  },
+  {
+    day: "Thursday",
+    startH: "12:00",
+    endH: "13:00",
+    date: {
+      day: 10,
+      month: 6,
+      year: 2021
+    }
+  }
+]
+
 export default Slot;

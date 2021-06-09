@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, Redirect, Route} from "react-router-dom"
+import {Link, Route} from "react-router-dom"
 import Schedule from "./Schedule"
 import Availabilities from "./Availabilities"
 import "./TA.css";

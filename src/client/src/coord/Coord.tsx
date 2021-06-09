@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, Redirect, Route} from "react-router-dom"
+import {Link, Route} from "react-router-dom"
 import "./Coord.css";
 import Dashboard from "./Dashboard";
 import Declare from "./Declare";
