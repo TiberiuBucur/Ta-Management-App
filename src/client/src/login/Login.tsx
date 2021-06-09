@@ -8,13 +8,20 @@ const Login = ({ setShortCode }: Props) => {
   const [input, setInput] = useState("");
   return (
     <div>
-      <input
-        type="text"
-        value={input}
-        placeholder="imperial shortcode"
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={() => setShortCode(input)}>login</button>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setShortCode(input);
+        }}
+      >
+        <input
+          type="text"
+          value={input}
+          placeholder="imperial shortcode"
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <input type="submit" value="Submit" />
+      </form>
     </div>
   );
 };

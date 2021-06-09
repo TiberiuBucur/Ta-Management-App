@@ -1,6 +1,19 @@
-type SlotAssignment = number | "backup" | "none"
+type SlotAssignment = number | "backup" | "none";
 
-type SlotStatus = "unavailable" | "assigned" | "claimed" | "missed" | "confirmed"
+type SlotStatus =
+  | "unavailable"
+  | "assigned"
+  | "claimed"
+  | "missed"
+  | "confirmed";
+
+// enum DayOfWeek {
+//   Monday,
+//   Tuesday,
+//   Wednesday,
+//   Thursday,
+//   Friday,
+// }
 
 type Slot = {
   id: number;
@@ -12,15 +25,25 @@ type Slot = {
   assignment: SlotAssignment;
   status: string;
   date: {
-      day: number;
-      month: number;
-      year: number;
+    day: number;
+    month: number;
+    year: number;
   };
-}
+};
 
 export const slotFromJson = (json: any): Slot => {
-  const {slot_id, shortcode, term, day, start_hour, end_hour, assigned, status, date} = json;
- 
+  const {
+    slot_id,
+    shortcode,
+    term,
+    day,
+    start_hour,
+    end_hour,
+    assigned,
+    status,
+    date,
+  } = json;
+
   return {
     id: slot_id as number,
     shortCode: shortcode as string,
@@ -28,16 +51,19 @@ export const slotFromJson = (json: any): Slot => {
     day: day as string,
     startH: start_hour as string,
     endH: end_hour as string,
-    assignment: assigned ? assigned as number : 
-      (status === "unavailable" ? "none" : "backup"),
+    assignment: assigned
+      ? (assigned as number)
+      : status === "unavailable"
+      ? "none"
+      : "backup",
     status: status as SlotStatus,
     date: {
       day: date.day as number,
       month: date.month as number,
-      year: date.year as number
-    }
-  }
-}
+      year: date.year as number,
+    },
+  };
+};
 
 export const slots = {
   avails: [
@@ -52,8 +78,8 @@ export const slots = {
       date: {
         day: 29,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 2,
@@ -66,7 +92,7 @@ export const slots = {
       date: {
         day: 29,
         month: 5,
-        year: 2021
+        year: 2021,
       },
     },
     {
@@ -81,8 +107,8 @@ export const slots = {
       date: {
         day: 20,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 4,
@@ -96,8 +122,8 @@ export const slots = {
       date: {
         day: 20,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 5,
@@ -110,8 +136,8 @@ export const slots = {
       date: {
         day: 21,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 6,
@@ -124,8 +150,8 @@ export const slots = {
       date: {
         day: 21,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 7,
@@ -138,8 +164,8 @@ export const slots = {
       date: {
         day: 24,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 8,
@@ -152,8 +178,8 @@ export const slots = {
       date: {
         day: 24,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 9,
@@ -166,8 +192,8 @@ export const slots = {
       date: {
         day: 27,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 10,
@@ -180,8 +206,8 @@ export const slots = {
       date: {
         day: 27,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 11,
@@ -194,8 +220,8 @@ export const slots = {
       date: {
         day: 28,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 12,
@@ -208,8 +234,8 @@ export const slots = {
       date: {
         day: 28,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 13,
@@ -222,8 +248,8 @@ export const slots = {
       date: {
         day: 31,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 14,
@@ -236,8 +262,8 @@ export const slots = {
       date: {
         day: 31,
         month: 5,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 15,
@@ -250,8 +276,8 @@ export const slots = {
       date: {
         day: 3,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 16,
@@ -264,8 +290,8 @@ export const slots = {
       date: {
         day: 3,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 17,
@@ -279,8 +305,8 @@ export const slots = {
       date: {
         day: 4,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 18,
@@ -294,8 +320,8 @@ export const slots = {
       date: {
         day: 4,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 19,
@@ -309,8 +335,8 @@ export const slots = {
       date: {
         day: 7,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 20,
@@ -324,8 +350,8 @@ export const slots = {
       date: {
         day: 7,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 21,
@@ -338,8 +364,8 @@ export const slots = {
       date: {
         day: 10,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 22,
@@ -352,10 +378,10 @@ export const slots = {
       date: {
         day: 10,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
-    
+
     {
       slot_id: 23,
       shortcode: "tcb19",
@@ -367,8 +393,8 @@ export const slots = {
       date: {
         day: 11,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
     {
       slot_id: 24,
@@ -381,10 +407,10 @@ export const slots = {
       date: {
         day: 11,
         month: 6,
-        year: 2021
-      }
+        year: 2021,
+      },
     },
-  ]
-}
+  ],
+};
 
 export default Slot;
