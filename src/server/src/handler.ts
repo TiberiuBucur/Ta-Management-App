@@ -1,5 +1,3 @@
-const db = require("../db/postgre");
-
 const invalid = availability => {
   const vals = Object.values(availability);
   return vals.length !== new Set(vals).size
@@ -7,9 +5,10 @@ const invalid = availability => {
 
 function Handler(db) {
   this.db = db;
-  this.submitAvailability = async function(username, availability) {
+
+  this.submitAvailability = async function (username, availability) {
     if (invalid(availability)) {
-      return Promise.resolve("You cannot have the same preference for the same day")
+      return Promise.resolve("You cannot have the same preference for the same day");
     }
 
     const alreadyHad = await this.db.hasAvailability(username);
@@ -17,9 +16,18 @@ function Handler(db) {
 
     return Promise.resolve(`Availability for ${username} ${alreadyHad ? "overridden" : "set"}`);
   }
-  this.getAvailability = async function(username) {
+
+  this.getAvailability = async function (username) {
     const row = await db.getUserRow(username);
     return JSON.parse(row.availability);
+  }
+
+  this.submitSessions = async function (slots) {
+    try {
+      this.db.setSessions(slots);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
