@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { Slot } from "../Slot";
+import { mockDataForTables } from "./initsAndMocks";
 
 
 const prodMode = process.env.DATABASE_URL !== undefined;
@@ -26,15 +27,15 @@ class Postgre {
   }
 
   public async hasAvailability(username: any): Promise<boolean> {
-    const qresult = await pool.query("SELECT * FROM tas where username = $1", [username]);
+    const qresult = await pool.query("SELECT * FROM tas where username = $1;", [username]);
     return qresult.rows.length !== 0;
   }
 
+  // TODO: fix nextsession.
   public async getAvailability(shortcode: string): Promise<[any[] | null, object | null]> {
-    const q = `SELECT * FROM ${TAS_SCHEDULE_TABLE} WHERE shortcode = '${shortcode}';`
-    console.log(`query: ${q}`);
-
-    return pool.query(`SELECT * FROM ${TAS_SCHEDULE_TABLE} WHERE shortcode = '${shortcode}';`)
+    return await pool.query(`SELECT shortcode, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
+                             FROM tas_schedule JOIN lab_slots ON tas_schedule.slot_id = lab_slots.id \
+                             WHERE shortcode = $1;`, [shortcode])
       .then(res => {
         if (!res || !(res.rows) || res.rows.length === 0) {
           return [null, null];
@@ -45,10 +46,12 @@ class Postgre {
         const now = Date.now();
 
         res.rows.forEach(slot => {
-          const date = new Date(slot.time);
+          const date = new Date(slot.date);
           if (!nextSession) {
             nextSession = date;
+            console.log(date);
           } else {
+            console.log(date);
             const diff = nextSession.getTime() - now;
             if (diff > closestTime) {
               closestTime = diff;
@@ -65,7 +68,6 @@ class Postgre {
             // the assignment is a number
             slot.assignment = Number(slot.assignment);
           }
-          delete slot.time;
         });
 
         let nextSess: object | null = null;
@@ -82,7 +84,7 @@ class Postgre {
   }
 
   public async getUserRow(username: any): Promise<any> {
-    const qresult = await pool.query("SELECT * FROM tas WHERE username = $1", [username]);
+    const qresult = await pool.query("SELECT * FROM tas WHERE username = $1;", [username]);
     return qresult.rows[0];
   }
 
@@ -95,7 +97,7 @@ class Postgre {
       const { date, startH, endH, term } = slot;
       // TODO: check if date.getDate() works here. (it doesn't)
       await pool.query(
-        `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4)`,
+        `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4);`,
         [`${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`, startH, endH, term]
       );
     }
@@ -103,7 +105,7 @@ class Postgre {
 
   public async getLabSlotsIds(): Promise<any> {
     try {
-      const res = await pool.query(`SELECT id FROM lab_slots`);
+      const res = await pool.query(`SELECT id FROM lab_slots;`);
       return res.rows;
     } catch (err) {
       console.log(err);

@@ -21,7 +21,7 @@ export async function mockLabSlots(): Promise<void> {
   const term: number = 3;
   const startH: string = '12:00';
   const endH: string = '13:00';
-  var date: Date = new Date('2020-6-15');
+  var date: Date = new Date('2021-6-15');
 
   const sessions: Slot[] = [];
   const sessionsNumber: number = 10;
