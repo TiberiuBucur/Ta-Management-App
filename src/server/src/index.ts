@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import Handler from "./handler";
-import { postgre } from "../db/postgre";
+import { postgre } from "./db/postgre";
 
 const server = express();
 const PORT = process.env.PORT || 5000;

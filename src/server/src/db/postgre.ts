@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { Slot } from "../src/Slot";
+import { Slot } from "../Slot";
 
 // Only to be used when first instantiating the mock ta_schedule for the first time
 // on a new platform

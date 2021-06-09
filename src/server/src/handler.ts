@@ -1,3 +1,5 @@
+import { Slot } from './Slot';
+
 const invalid = availability => {
   const vals = Object.values(availability);
   return vals.length !== new Set(vals).size
@@ -12,7 +14,7 @@ function Handler(db) {
     }
 
     const alreadyHad = await this.db.hasAvailability(username);
-    let r = await this.db.setAvailability(username, availability);
+    await this.db.setAvailability(username, availability);
 
     return Promise.resolve(`Availability for ${username} ${alreadyHad ? "overridden" : "set"}`);
   }
@@ -22,12 +24,8 @@ function Handler(db) {
     return JSON.parse(row.availability);
   }
 
-  this.submitSessions = async function (slots) {
-    try {
-      this.db.setSessions(slots);
-    } catch (err) {
-      console.log(err);
-    }
+  this.submitSessions = async function (slots: Slot[]): Promise<void> {
+    this.db.setSessions(slots);
   }
 }
 
