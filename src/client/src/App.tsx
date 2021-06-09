@@ -14,12 +14,11 @@ function App() {
   const [shortCode, setShortCode] = useState("");
   
   const isLoggedIn = shortCode !== "";
-  const isCoord = false;
+  const isCoord = shortCode === "kgk";
 
   return (
     <Router>
       <div className="App">
-        {/* <Login setShortCode={setShortCode} /> */}
         <Redirect to={isLoggedIn ? "/" : "/login"} />
         <Switch>
           <Route

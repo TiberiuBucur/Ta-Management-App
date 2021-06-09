@@ -13,3 +13,20 @@
 .bolden {
   font-weight: bold;
 }
+
+header {
+  background-color: var(--color-dark-grey);
+  height: 50px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  color: white;
+  padding: 0 50px;
+  top:0;
+  left: 0;
+  position: sticky;
+}
+
