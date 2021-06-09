@@ -89,13 +89,14 @@ class Postgre {
   }
 
   public async setSessions(slots: Slot[]) {
+    // Clears old sessions from database. TODO: change this if necessary
     await pool.query(`DELETE FROM ${labSlotsTable}`);
 
     slots.forEach(async (slot: Slot) => {
       const { date, startH, endH } = slot;
       await pool.query(
         // Doamne ajuta
-        `INSERT INTO ${labSlotsTable} (date, start, end) VALUES($1, $2, $3)`,
+        `INSERT INTO ${labSlotsTable} (date, startH, endH) VALUES('$1', '$2', '$3')`,
         [date, startH, endH]
       );
     });
