@@ -54,6 +54,23 @@ const Declare = () => {
     setSlots([...slots, ...mkSlots(parseInt(startH), date, isRec)]);
   };
 
+  const handleSubmit = async () => {
+    const response = await fetch("/submitallsessions", {
+      method: "POST",
+      mode: "same-origin",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(slots),
+    });
+    
+    const data = await response.json();
+
+    console.log(data);
+  }
+
   const SlotRow = (slot: Slot, index: number) => {
     const oddClass = index % 2 === 1 ? "odd-index" : "";
     return (
@@ -84,6 +101,11 @@ const Declare = () => {
     );
   } 
 
+  const newSlots: Slot[] = [...new Set(slots.map(s => JSON.stringify(s)))]
+    .map(s => JSON.parse(s));
+
+  if (newSlots.length !== slots.length) setSlots(newSlots);
+
   return (
     <div className="declare">
       <div className="session-selector">
@@ -113,8 +135,9 @@ const Declare = () => {
         </button>
       </div>
       <div className="sessions-view">
-        {slots.length !== 0 ? slots.sort(cmpSlots).map(SlotRow) : <div className="slot-row"> Insert the lab session slots for this term </div>}
-        <button className="submit-bttn">SUBMIT</button>
+        {slots.length !== 0 ? slots.sort(cmpSlots).map(SlotRow) 
+          : <div className="slot-row"> Insert the lab session slots for this term </div>}
+        <button className="submit-bttn" onClick={handleSubmit}>SUBMIT</button>
       </div>
     </div>
   );
