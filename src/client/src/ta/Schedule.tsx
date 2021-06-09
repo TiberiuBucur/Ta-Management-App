@@ -47,10 +47,10 @@ const Schedule = (props: { shortCode: string }) => {
             return (
               <div
                 className="session"
-                id={isNext ? "next-session" : ""}
+                id={isNext ? "next-session" : undefined}
                 key={slot1.id}
               >
-                {isNext ? <span ref={nextSessionRef}></span> : undefined}
+                {isNext ? <span className="hook" ref={nextSessionRef}></span> : undefined}
                 <SlotBox slot={slot1} />
                 <SlotBox slot={slot2} />
               </div>

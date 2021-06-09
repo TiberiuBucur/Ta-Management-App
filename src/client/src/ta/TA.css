@@ -38,3 +38,8 @@
   border-style: solid;
   border-radius: 5px;
 }
+
+.ta-page .schedule #next-session .hook {
+  position: relative;
+  top: -60px;
+}
