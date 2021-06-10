@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
+import "./Schedule.css";
 
 const groupByDay = (slots: Slot[]): Slot[][] => {
   const res = [];
@@ -16,20 +17,18 @@ const Schedule = (props: { shortCode: string }) => {
     if (nextSessionRef.current) {
       nextSessionRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }
-  
+  };
+
   const [slots, setSlots] = useState<Slot[]>([]);
   const nextSessionId = 15;
 
   const fetchSlots = async () => {
     // const response = await fetch(`/schedule/${props.shortCode}`, {
-    //   method: "GET",
-    //   mode: "same-origin",
-    //   cache: "no-cache"
+    // method: "GET",
+    // mode: "same-origin",
+    // cache: "no-cache"
     // }).then(res => console.log(res));
-
     const data = sampleSlots; // await response.json();
-
     setSlots(data.avails.map(slotFromJson));
   };
 
@@ -39,23 +38,58 @@ const Schedule = (props: { shortCode: string }) => {
   }, []);
 
   return (
-    <div className="schedule">
-      {slots === []
-        ? "Loading slots..."
-        : groupByDay(slots).map(([slot1, slot2]) => {
-            const isNext = slot1.id === nextSessionId;
-            return (
-              <div
-                className="session"
-                id={isNext ? "next-session" : undefined}
-                key={slot1.id}
-              >
-                {isNext ? <span className="hook" ref={nextSessionRef}></span> : undefined}
-                <SlotBox slot={slot1} />
-                <SlotBox slot={slot2} />
-              </div>
-            );
-          })}
+    <div className="schedule-page">
+      {slots.length !== 0 && (
+        <div className="calendar">
+          <div className="calendar-text">
+            These are your slots for the Lab sessions in this term. Press here
+            to integrate with your calendar
+          </div>
+          <div className="bttn-group">
+            <button
+              className="outlook-bttn"
+              onClick={() => console.log("Pressed Outlook button")}
+            >
+              <img id="outlook-icon" src="/images/outlook-calendar.png" />
+              Outlook
+            </button>
+            <button
+              className="google-bttn"
+              onClick={() => console.log("Pressed Google calendar")}
+            >
+              <img id="google-icon" src="/images/google-calendar.png" />
+              Google
+            </button>
+            <button
+              className="apple-bttn"
+              onClick={() => console.log("Pressed Apple calendar")}
+            >
+              <img id="apple-icon" src="/images/apple-calendar.png " />
+              iCalendar
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="schedule">
+        {slots.length === 0
+          ? "Loading slots..."
+          : groupByDay(slots).map(([slot1, slot2]) => {
+              const isNext = slot1.id === nextSessionId;
+              return (
+                <div
+                  className="session"
+                  id={isNext ? "next-session" : undefined}
+                  key={slot1.id}
+                >
+                  {isNext ? (
+                    <span className="hook" ref={nextSessionRef}></span>
+                  ) : undefined}
+                  <SlotBox slot={slot1} />
+                  <SlotBox slot={slot2} />
+                </div>
+              );
+            })}
+      </div>
     </div>
   );
 };
