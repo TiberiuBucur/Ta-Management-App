@@ -7,25 +7,25 @@ import {
   Redirect,
 } from "react-router-dom";
 import TA from "./ta/TA";
-import Coord from "./coord/Coord";
+import Coord from "./coord/Coord"
 import "./App.css";
 
 function App() {
   const [shortCode, setShortCode] = useState("");
-
+  
   const isLoggedIn = shortCode !== "";
   const isCoord = shortCode === "kgk";
-
-  const correctPath = isCoord ? "/dashboard" : "/sched";
 
   return (
     <Router>
       <div className="App">
-        <Redirect to={isLoggedIn ? correctPath : "/login"} />
+        <Redirect to={isLoggedIn ? "/" : "/login"} />
         <Switch>
           <Route
             path="/login"
-            component={() => <Login setShortCode={setShortCode} />}
+            component={() => (
+              <Login setShortCode={setShortCode} />
+            )}
           />
           <Route
             path="/"
