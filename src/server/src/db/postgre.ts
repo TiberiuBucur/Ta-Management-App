@@ -42,21 +42,21 @@ class Postgre {
         }
 
         let nextSession: Date | null = null;
-        let closestTime = -1;
+        let closestTime = Number.MAX_VALUE;
         const now = Date.now();
 
+        // The times from the database are assumed to be UTC, but js's Date() 
+        // assumes we are constructing local time, so we need to add the UTC offset (in case the server
+        // is running somewhere with no UTC) for accurate times
+        const _ofs = new Date();
+        const ofs = - _ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
+
         res.rows.forEach(slot => {
-          const date = new Date(slot.date);
-          if (!nextSession) {
-            nextSession = date;
-            console.log(date);
-          } else {
-            console.log(date);
-            const diff = nextSession.getTime() - now;
-            if (diff > closestTime) {
+          const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
+          const diff = date.getTime() - now;
+          if (diff < closestTime) {
               closestTime = diff;
               nextSession = date;
-            }
           }
 
           slot.date = {
@@ -71,7 +71,7 @@ class Postgre {
         });
 
         let nextSess: object | null = null;
-        if (closestTime !== -1) {
+        if (closestTime !== Number.MAX_VALUE) {
           nextSess = {
             day: nextSession.getUTCDate(),
             month: nextSession.getUTCMonth() + 1,
@@ -132,5 +132,6 @@ const pool: Pool = prodMode
   });
 
 const postgre = new Postgre(pool);
+
 
 export { postgre, pool };
