@@ -49,21 +49,33 @@ const Schedule = (props: { shortCode: string }) => {
               className="outlook-bttn"
               onClick={() => console.log("Pressed Outlook button")}
             >
-              <img id="outlook-icon" src="/images/outlook-calendar.png" />
+              <img
+                id="outlook-icon"
+                alt="Not found"
+                src="/images/outlook-calendar.png"
+              />
               Outlook
             </button>
             <button
               className="google-bttn"
               onClick={() => console.log("Pressed Google calendar")}
             >
-              <img id="google-icon" src="/images/google-calendar.png" />
+              <img
+                id="google-icon"
+                alt="Not found"
+                src="/images/google-calendar.png"
+              />
               Google
             </button>
             <button
               className="apple-bttn"
               onClick={() => console.log("Pressed Apple calendar")}
             >
-              <img id="apple-icon" src="/images/apple-calendar.png " />
+              <img
+                id="apple-icon"
+                alt="Not found"
+                src="/images/apple-calendar.png "
+              />
               iCalendar
             </button>
           </div>
