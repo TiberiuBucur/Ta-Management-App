@@ -95,8 +95,6 @@ async function mockTasSchedule(): Promise<void> {
  */
 async function mockTasScheduleHelper(): Promise<void> {
   const shortcode = "testsc";
-  const term = 3;
-  const date = new Date("2021-06-17");
   const slotsIds = await postgre.getLabSlotsIds();
   console.log(slotsIds);
 
@@ -113,8 +111,11 @@ async function mockTasScheduleHelper(): Promise<void> {
 
     try {
       const r = createQ(slotsIds[i].id);
+      const other = i === slotsIds.length - 1 ? i - 1 : i + 1;
+      const r2 = createQ(slotsIds[other].id);
       console.log(r);
       await pool.query(r);
+      await pool.query(r2);
     } catch (err) {
       console.log(err);
     }

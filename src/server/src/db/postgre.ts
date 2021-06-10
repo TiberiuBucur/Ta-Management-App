@@ -149,5 +149,4 @@ const pool: Pool = prodMode
 
 const postgre = new Postgre(pool);
 
-
 export { postgre, pool };

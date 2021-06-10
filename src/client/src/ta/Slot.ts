@@ -31,7 +31,6 @@ export const slotFromJson = (json: any): Slot => {
     date,
   } = json;
 
-  console.log(`slot_id: ${slot_id}`);
   assignment = assignment || "none";
   let ass: SlotAssignment;
     if (typeof assignment === "number") {

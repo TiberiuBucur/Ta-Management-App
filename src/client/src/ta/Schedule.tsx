@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
 
 const groupByDay = (slots: Slot[]): Slot[][] => {
+  console.assert(slots.length > 1);
   const res = [];
   for (let i = 0; i < slots.length - 1; i += 2) {
     res.push([slots[i], slots[i + 1]]);
@@ -35,7 +37,9 @@ const Schedule = (props: { shortCode: string }) => {
       data = await response.json();// sampleSlots; // await response.json();
     }
 
-    setSlots(data.slots.map(slotFromJson));
+    const sls = data.slots.map(slotFromJson);
+    console.log(sls);
+    setSlots(sls);
   };
 
   useEffect(() => {
@@ -45,7 +49,7 @@ const Schedule = (props: { shortCode: string }) => {
 
   return (
     <div className="schedule">
-      {slots === []
+      {slots.length === 0  
         ? "Loading slots..."
         : groupByDay(slots).map(([slot1, slot2]) => {
             const isNext = slot1.id === nextSessionId;
