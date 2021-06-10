@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import Handler from "./handler";
-import { postgre } from "../db/postgre";
+import { postgre } from "./db/postgre";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -38,14 +38,21 @@ server.get("/schedule/:shortcode", async (req, res) => {
 
 });
 
-server.get("/allavailabilities", async (_req, res) => {
+server.post("/submitallsessions", async (req, res) => {
+  const { slots } = req.body;
+  const msg = await handler.submitSessions(slots);
+  
+  res.status(200).send({ msg });
+});
+
+server.get("/allavailabilities", async (_, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
-
+  
   res.status(200).json({ rows })
 });
 
-server.get("*", (req, res) => {
+server.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
   
 })

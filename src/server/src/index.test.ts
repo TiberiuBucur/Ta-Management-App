@@ -1,5 +1,5 @@
 // integration test
-import { postgre } from "../db/postgre";
+import { postgre } from "./db/postgre";
 import Handler from "./handler";
 
 const handler = new Handler(postgre);
