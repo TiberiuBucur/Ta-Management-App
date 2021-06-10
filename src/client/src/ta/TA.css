@@ -4,8 +4,9 @@
 
 .ta-page .calendar {
   margin-left: 30px;
-  margin-top: 10px;
+  margin-top: 20px;
   display: block;
+  margin-bottom: 30px;
 }
 
 .ta-page .calendar .calendar-text {
@@ -19,6 +20,12 @@
 .ta-page .calendar .bttn-group {
   margin-top: 5px;
   text-align: center;
+}
+
+.ta-page .calendar .bttn-group button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .ta-page .calendar .bttn-group .google-bttn {
