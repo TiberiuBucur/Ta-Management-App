@@ -34,7 +34,7 @@ const Schedule = (props: { shortCode: string }) => {
     if (response.status === 404) {
       data = sampleSlots;
     } else {
-      data = await response.json(); // sampleSlots; // await response.json();
+      data = await response.json(); // sampleSlots;
     }
 
     const sls = data.slots.map(slotFromJson);
