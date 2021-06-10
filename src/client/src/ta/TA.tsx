@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, Route, Switch } from "react-router-dom";
-import Schedule from "./Schedule";
-import Availabilities from "./Availabilities";
+import {Link, Route} from "react-router-dom"
+import Schedule from "./Schedule"
+import Availabilities from "./Availabilities"
 import "./TA.css";
 
 interface Props {
@@ -9,35 +9,26 @@ interface Props {
 }
 
 const TA = ({ shortCode }: Props) => {
+  
   return (
     <div className="ta-page">
-      <Header shortCode={shortCode} />
-      <Switch>
-        <Route
-          path="/sched"
-          component={() => <Schedule shortCode={shortCode} />}
-        />
-        <Route
-          path="/availabilities"
-          component={() => <Availabilities shortCode={shortCode} />}
-        />
-      </Switch>
+      <Header shortCode={shortCode}/>
+      <Route path="/sched" component={() => <Schedule shortCode={shortCode} />} />
+      <Route path="/availabilities" component={() => <Availabilities shortCode={shortCode} />} />
     </div>
   );
 };
 
-const Header = ({ shortCode }: Props) => {
+const Header = ({ shortCode } : Props) => {
   return (
     <header>
       <div>
         <Link to="/sched">Schedule</Link>
-        <Link to="/availabilities" style={{ marginLeft: "30px" }}>
-          Your Availability
-        </Link>
+        <Link to="/availabilities" style={{marginLeft: "30px"}}>Your Availability</Link>
       </div>
       <span>{shortCode}@ic.ac.uk</span>
-    </header>
-  );
-};
+    </header> 
+  )
+}
 
 export default TA;
