@@ -28,7 +28,7 @@ server.get("/schedule/:shortcode", async (req, res) => {
     // TODO: change any to a concrete type after merging with frontend (type defined on FE)
     const [avails, nextSession] = await postgre.getAvailability(shortcode);
     if (!avails || avails.length === 0) {
-      res.status(200).json(200).json({ shortcode: shortcode, slots: [] });
+      res.status(404).send();
       return;
     }
     const term = avails[0].term;

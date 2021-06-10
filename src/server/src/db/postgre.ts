@@ -10,6 +10,20 @@ export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
 export const LAB_SLOTS_TABLE: string = "lab_slots";
 export const TAS_TABLE: string = "tas_table";
 
+type DayOfWeek = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+
+function dayOfWeekFromNumber(d: number): DayOfWeek {
+  switch (d) {
+      case 1 : return "Monday";
+      case 2 : return "Tuesday";
+      case 3 : return "Wednesday";
+      case 4 : return "Thursday";
+      case 5 : return "Friday";
+      case 6 : return "Saturday";
+      case 7 : return "Sunday";
+  }
+}
+
 
 class Postgre {
 
@@ -33,7 +47,7 @@ class Postgre {
 
   // TODO: fix nextsession.
   public async getAvailability(shortcode: string): Promise<[any[] | null, object | null]> {
-    return await pool.query(`SELECT shortcode, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
+    return await pool.query(`SELECT shortcode, slot_id, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
                              FROM tas_schedule JOIN lab_slots ON tas_schedule.slot_id = lab_slots.id \
                              WHERE shortcode = $1;`, [shortcode])
       .then(res => {
@@ -59,6 +73,7 @@ class Postgre {
               nextSession = date;
           }
 
+          slot.day = dayOfWeekFromNumber(date.getUTCDay());
           slot.date = {
             day: date.getDate(),
             month: date.getUTCMonth() + 1,

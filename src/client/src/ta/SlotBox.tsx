@@ -26,10 +26,10 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
     }
   };
   const getExtraText = ({ assignment, status }: Slot): JSX.Element => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "missed":
         return <span>You have missed this slot</span>;
-      case "confirmed":
+      case "ready_to_claim":
         return <span>Click here to claim for this work hour</span>;
       case "claimed":
         return <span>This work hour is claimed</span>;

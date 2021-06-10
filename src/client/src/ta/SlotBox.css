@@ -12,22 +12,22 @@
   justify-content: space-between;
 }
 
-.assigned {
+.ASSIGNED {
   background-color: white;
 } 
 
-.claimed {
+.CLAIMED {
   background-color: var(--color-light-green);
 } 
 
-.missed {
+.MISSED {
   background-color: var(--color-light-red);
 }
 
-.unavailable {
+.UNAVAILABLE {
   background-color: var(--color-grey);
 }
 
-.confirmed {
+.READY_TO_CLAIM {
   background-color: var(--color-light-violet);
 }

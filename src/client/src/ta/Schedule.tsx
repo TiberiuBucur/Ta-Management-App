@@ -22,15 +22,20 @@ const Schedule = (props: { shortCode: string }) => {
   const nextSessionId = 15;
 
   const fetchSlots = async () => {
-    // const response = await fetch(`/schedule/${props.shortCode}`, {
-    //   method: "GET",
-    //   mode: "same-origin",
-    //   cache: "no-cache"
-    // }).then(res => console.log(res));
+    const response = await fetch(`/schedule/${props.shortCode}`, {
+      method: "GET",
+      mode: "same-origin",
+      cache: "no-cache"
+    });
 
-    const data = sampleSlots; // await response.json();
+    let data;
+    if (response.status === 404) {
+      data = sampleSlots;
+    } else {
+      data = await response.json();// sampleSlots; // await response.json();
+    }
 
-    setSlots(data.avails.map(slotFromJson));
+    setSlots(data.slots.map(slotFromJson));
   };
 
   useEffect(() => {
