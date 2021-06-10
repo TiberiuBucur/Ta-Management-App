@@ -1,6 +1,46 @@
-.ta-page .schedule {
+.ta-page {
   background-color: var(--color-light-grey);
+}
 
+.ta-page .calendar {
+  margin-left: 30px;
+  margin-top: 20px;
+  display: block;
+  margin-bottom: 30px;
+}
+
+.ta-page .calendar .calendar-text {
+  text-align: center;
+  font-size: large;
+  /* font-variant: small-caps; */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.ta-page .calendar .bttn-group {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.ta-page .calendar .bttn-group button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ta-page .calendar .bttn-group .google-bttn {
+  margin-left: 20px;
+}
+
+.ta-page .calendar .bttn-group .apple-bttn {
+  margin-left: 20px;
+}
+
+.ta-page .calendar .bttn-group {
+  margin-left: 20px;
+}
+
+.ta-page .schedule {
   display: flex;
   flex-direction: row;
   align-items: center;
