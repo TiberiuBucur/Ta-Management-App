@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import Handler from "./handler";
 import { postgre } from "./db/postgre";
+import { slotFromJson } from "./Slot";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -40,7 +41,10 @@ server.get("/schedule/:shortcode", async (req, res) => {
 
 server.post("/submitallsessions", async (req, res) => {
   const { slots } = req.body;
-  const msg = await handler.submitSessions(slots);
+  console.log(slots);
+  const data = slots.map(s => slotFromJson(s));
+
+  const msg = await handler.submitSessions(data);
   
   res.status(200).send({ msg });
 });

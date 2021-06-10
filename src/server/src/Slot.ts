@@ -10,12 +10,16 @@ export type Slot = {
 }
 
 export const slotFromJson = (json: any): Slot => {
-  const { term, start_hour, end_hour, date } = json;
+  const { term, startH, endH, date } = json;
+  const d = new Date();
+  d.setUTCFullYear(date.year);
+  d.setUTCMonth(date.month - 1);
+  d.setUTCDate(date.day);
 
   return {
-    term: term as number,
-    startH: start_hour as string,
-    endH: end_hour as string,
-    date: date as Date
+    term: 3, // TODO: Use actual term
+    startH: startH,
+    endH: endH,
+    date: d
   }
 }

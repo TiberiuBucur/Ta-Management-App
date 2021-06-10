@@ -66,7 +66,7 @@ const Declare = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(slots),
+      body: JSON.stringify({slots}),
     });
     
     const data = await response.json();

@@ -108,9 +108,10 @@ class Postgre {
     await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE}`);
     await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
 
+    console.log(slots);
     for (const slot of slots) {
       const { date, startH, endH, term } = slot;
-      // TODO: check if date.getDate() works here. (it doesn't)
+
       await pool.query(
         `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4);`,
         [`${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`, startH, endH, term]
