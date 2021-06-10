@@ -29,6 +29,6 @@ export const cmpSlots = (s1: Slot, s2: Slot): number => {
   return startHCmp ? -1 : 1;
 }
 
-export const prettyDate = (date: Date): string => `${date.day}/${date.month}`
+export const prettyDate = (date: Date): string => `${date.day}/${date.month}/${date.year}`
 
 export default Slot;

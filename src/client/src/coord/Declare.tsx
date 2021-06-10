@@ -16,7 +16,8 @@ const weekDays = [
 ]
 
 const mkSlots = (
-  startH: number,
+  startH: string,
+  endH: string,
   dateStr: string,
   recurring: boolean
 ): Slot[] => {
@@ -28,8 +29,8 @@ const mkSlots = (
     res.push(
       {
         day: weekDays[date.getDay() - 1],
-        startH: `${startH}:00`,
-        endH: `${startH + 1}:00`,
+        startH,
+        endH,
         date: {
           day: date.getUTCDate(),
           month: date.getMonth() + 1,
@@ -46,12 +47,14 @@ const mkSlots = (
 const Declare = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
 
-  const [startH, setStartH] = useState("9");
+  const [startH, setStartH] = useState("09:00");
+  const [endH, setEndH] = useState("10:00");
+
   const [date, setDate] = useState("");
   const [isRec, setIsRec] = useState(false);
 
   const handleAdd = () => {
-    setSlots([...slots, ...mkSlots(parseInt(startH), date, isRec)]);
+    setSlots([...slots, ...mkSlots(startH, endH, date, isRec)]);
   };
 
   const handleSubmit = async () => {
@@ -111,11 +114,18 @@ const Declare = () => {
       <div className="session-selector">
         <div className="selection">
           Start hour:
-          <input className="start-hour-input"
-            type="text"
-            placeholder="from 9 to 16"
+          <input className="hour-input"
+            type="time"
             value={startH}
             onChange={(e) => setStartH(e.target.value)}
+          />
+        </div>
+        <div className="selection">
+          End hour:
+          <input className="hour-input"
+            type="time"
+            value={endH}
+            onChange={(e) => setEndH(e.target.value)}
           />
         </div>
         <div className="selection">

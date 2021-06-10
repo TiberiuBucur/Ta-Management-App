@@ -1,7 +1,7 @@
 .declare .session-selector {
   margin: 30px 0;
   margin-left: 20px;
-  width: 650px;
+  width: 800px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -17,7 +17,6 @@
 }
 
 .declare .session-selector .selection .start-hour-input {
-  width: 30px;
   text-align: center;
 }
 
