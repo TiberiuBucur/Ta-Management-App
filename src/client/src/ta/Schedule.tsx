@@ -18,8 +18,8 @@ const Schedule = (props: { shortCode: string }) => {
     if (nextSessionRef.current) {
       nextSessionRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }
-  
+  };
+
   const [slots, setSlots] = useState<Slot[]>([]);
   const nextSessionId = 15;
 
@@ -27,14 +27,14 @@ const Schedule = (props: { shortCode: string }) => {
     const response = await fetch(`/schedule/${props.shortCode}`, {
       method: "GET",
       mode: "same-origin",
-      cache: "no-cache"
+      cache: "no-cache",
     });
 
     let data;
     if (response.status === 404) {
       data = sampleSlots;
     } else {
-      data = await response.json();// sampleSlots; // await response.json();
+      data = await response.json(); // sampleSlots; // await response.json();
     }
 
     const sls = data.slots.map(slotFromJson);
@@ -49,7 +49,7 @@ const Schedule = (props: { shortCode: string }) => {
 
   return (
     <div className="schedule">
-      {slots.length === 0  
+      {slots.length === 0
         ? "Loading slots..."
         : groupByDay(slots).map(([slot1, slot2]) => {
             const isNext = slot1.id === nextSessionId;
@@ -59,7 +59,9 @@ const Schedule = (props: { shortCode: string }) => {
                 id={isNext ? "next-session" : undefined}
                 key={slot1.id}
               >
-                {isNext ? <span className="hook" ref={nextSessionRef}></span> : undefined}
+                {isNext ? (
+                  <span className="hook" ref={nextSessionRef}></span>
+                ) : undefined}
                 <SlotBox slot={slot1} />
                 <SlotBox slot={slot2} />
               </div>
