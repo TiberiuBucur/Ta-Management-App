@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
 
 const groupByDay = (slots: Slot[]): Slot[][] => {
+  console.assert(slots.length > 1);
   const res = [];
   for (let i = 0; i < slots.length - 1; i += 2) {
     res.push([slots[i], slots[i + 1]]);
@@ -22,13 +24,22 @@ const Schedule = (props: { shortCode: string }) => {
   const nextSessionId = 15;
 
   const fetchSlots = async () => {
-    // const response = await fetch(`/schedule/${props.shortCode}`, {
-    // method: "GET",
-    // mode: "same-origin",
-    // cache: "no-cache"
-    // }).then(res => console.log(res));
-    const data = sampleSlots; // await response.json();
-    setSlots(data.avails.map(slotFromJson));
+    const response = await fetch(`/schedule/${props.shortCode}`, {
+      method: "GET",
+      mode: "same-origin",
+      cache: "no-cache",
+    });
+
+    let data;
+    if (response.status === 404) {
+      data = sampleSlots;
+    } else {
+      data = await response.json(); // sampleSlots; // await response.json();
+    }
+
+    const sls = data.slots.map(slotFromJson);
+    console.log(sls);
+    setSlots(sls);
   };
 
   useEffect(() => {
