@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
-import "./Schedule.css";
 
 const groupByDay = (slots: Slot[]): Slot[][] => {
   const res = [];
@@ -38,12 +37,12 @@ const Schedule = (props: { shortCode: string }) => {
   }, []);
 
   return (
-    <div className="schedule-page">
+    <div>
       {slots.length !== 0 && (
         <div className="calendar">
           <div className="calendar-text">
-            These are your slots for the Lab sessions in this term. Press here
-            to integrate with your calendar
+            These are your slots for the Lab sessions in this term. Press one of
+            the buttons below to integrate with your calendar
           </div>
           <div className="bttn-group">
             <button
