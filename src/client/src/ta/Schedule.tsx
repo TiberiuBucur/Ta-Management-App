@@ -24,27 +24,40 @@ const Schedule = (props: { shortCode: string }) => {
   const nextSessionId = 15;
 
   const fetchSlots = async () => {
-    const response = await fetch(`/schedule/${props.shortCode}`, {
-      method: "GET",
-      mode: "same-origin",
-      cache: "no-cache",
-    });
-
     let data;
-    if (response.status === 404) {
+    try {
+      const response = await fetch(`/schedule/${props.shortCode}`, {
+        method: "GET",
+        mode: "same-origin",
+        cache: "no-cache",
+      });
+
+      if (response.status === 404) {
+        throw new Error();
+      } else {
+        data = await response.json();
+      }
+    } catch (error) {
       data = sampleSlots;
-    } else {
-      data = await response.json(); // sampleSlots;
     }
 
     const sls = data.slots.map(slotFromJson);
-    console.log(sls);
-    setSlots(sls);
+    return sls;
   };
 
   useEffect(() => {
-    fetchSlots();
+    let isMounted = true;
+    fetchSlots()
+      .then(ss => {
+        console.log("Received", ss);
+        if (isMounted) setSlots(ss);
+      })
+      .catch(err => alert("Something went wrong"));
     setTimeout(scrollToNext, 1000);
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
