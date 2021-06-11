@@ -1,8 +1,10 @@
-import React from "react-dom";
+import React, { useState } from "react";
 import Slot from "./Slot";
 import "./SlotBox.css";
 
 const SlotBox = ({ slot }: { slot: Slot }) => {
+  const [isPopup, setIsPopup] = useState(false);
+
   const getDateText = (slot: Slot): string =>
     `${slot.day}, ${slot.date.day}/${slot.date.month}`;
   const getTimeText = (slot: Slot): string => `${slot.startH} - ${slot.endH}`;
@@ -32,28 +34,77 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
       case "ready_to_claim":
         return (
           <span>
-            <a href="https://www.google.com">Click here</a> to claim for this
-            work hour
+            <a
+              href="https://tsc.doc.ic.ac.uk/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Click here
+            </a>{" "}
+            to claim for this work hour
           </span>
         );
       case "claimed":
         return <span>This work hour is claimed</span>;
       case "unavailable":
         return <span>There is no available channel</span>;
-      default:
+      case "assigned":
+        const endStr: string =
+          assignment === "backup"
+            ? " to view any free channels"
+            : " if you cannot attend this slot";
+        const linkClass =
+          assignment === "backup" ? "for-backup" : "for-channel";
+        const handler = (event: any) => {
+          if (event.target.className === "for-channel") {
+            setIsPopup(true);
+            return;
+          }
+
+          if (event.target.className === "for-backup") {
+            return;
+          }
+        };
         return (
           <span>
-            <a href="https://www.google.com">Click here</a>
-            {assignment === "backup"
-              ? " to view any free channels"
-              : " if you cannot attend this slot"}
+            <a onClick={handler} className={linkClass}>
+              Click here
+            </a>
+            {endStr}
           </span>
         );
+      default:
+        alert("Something went wrong");
+        return <span></span>;
     }
   };
 
   return (
     <div className={`slot-box ${slot.status}`}>
+      {isPopup && (
+        <div className="popup">
+          <div>Are you sure you want to yield this slot?</div>
+          <div className="confirm-bttns">
+            <button
+              className="confirm-miss-slot-bttn"
+              onClick={() => {
+                // TODO: Change to missed / backup
+                // TODO: submit to backend
+                setIsPopup(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="cancel-miss-slot-bttn"
+              onClick={() => setIsPopup(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="date-time">
         <span className="date">{getDateText(slot)}</span>
         <span className="time">{getTimeText(slot)}</span>
