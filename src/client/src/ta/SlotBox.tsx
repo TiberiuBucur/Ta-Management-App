@@ -56,21 +56,24 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
         const linkClass =
           assignment === "backup" ? "for-backup" : "for-channel";
         const handler = (event: any) => {
-          if (event.target.className === "for-channel") {
+          if (event.target.className.includes("for-channel")) {
             setIsPopup(true);
             return;
           }
 
-          if (event.target.className === "for-backup") {
+          if (event.target.className.includes("for-backup")) {
             setIsPopup(true);
             return;
           }
         };
         return (
           <span>
-            <a onClick={handler} className={linkClass}>
+            <button
+              onClick={handler}
+              className={"click-here-bttn " + linkClass}
+            >
               Click here
-            </a>
+            </button>
             {endStr}
           </span>
         );
@@ -88,8 +91,9 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
         <div className="popup">
           {slot.assignment === "backup" ? (
             <div>
-              {mockChannels.map((no) => (
+              {mockChannels.map(no => (
                 <button
+                  key={no}
                   className="free-ch-bttn"
                   onClick={() => setIsPopup(false)}
                 >
@@ -99,7 +103,9 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
             </div>
           ) : (
             <div>
-              <div>Are you sure you want to yield this slot?</div>
+              <div style={{ textAlign: "center" }}>
+                Are you sure you want to yield this slot?
+              </div>
               <div className="confirm-bttns">
                 <button
                   className="confirm-miss-slot-bttn"
