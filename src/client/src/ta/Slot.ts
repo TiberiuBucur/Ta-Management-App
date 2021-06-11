@@ -1,6 +1,7 @@
 type SlotAssignment = number | "backup" | "none";
 
-type SlotStatus = "UNAVAILABLE"
+type SlotStatus =
+  | "UNAVAILABLE"
   | "ASSIGNED"
   | "CLAIMED"
   | "MISSED"
@@ -12,7 +13,7 @@ type Slot = {
   startH: string;
   endH: string;
   assignment: SlotAssignment;
-  status: string;
+  status: SlotStatus;
   date: {
     day: number;
     month: number;
@@ -21,23 +22,16 @@ type Slot = {
 };
 
 export const slotFromJson = (json: any): Slot => {
-  let {
-    slot_id,
-    day,
-    start_hour,
-    end_hour,
-    assignment,
-    status,
-    date,
-  } = json;
+  let { slot_id, day, start_hour, end_hour, assignment, status, date } = json;
 
   assignment = assignment || "none";
   let ass: SlotAssignment;
-    if (typeof assignment === "number") {
-      ass = assignment as number; 
-    } else {
-      ass = assignment as SlotAssignment;
-    }
+  if (typeof assignment === "number") {
+    ass = assignment as number;
+  } else {
+    ass = assignment as SlotAssignment;
+  }
+
   return {
     id: slot_id as number,
     day: day as string,
@@ -63,6 +57,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "MISSED",
+      assignment: "backup",
       date: {
         day: 29,
         month: 5,
@@ -77,6 +72,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "MISSED",
+      assignment: "backup",
       date: {
         day: 29,
         month: 5,
@@ -121,6 +117,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 21,
         month: 5,
@@ -135,6 +132,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 21,
         month: 5,
@@ -149,6 +147,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "READY_TO_CLAIM",
+      assignment: "backup",
       date: {
         day: 24,
         month: 5,
@@ -163,6 +162,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "MISSED",
+      assignment: "backup",
       date: {
         day: 24,
         month: 5,
@@ -177,6 +177,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "MISSED",
+      assignment: 3,
       date: {
         day: 27,
         month: 5,
@@ -191,6 +192,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "MISSED",
+      assignment: 3,
       date: {
         day: 27,
         month: 5,
@@ -205,6 +207,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 28,
         month: 5,
@@ -219,6 +222,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 28,
         month: 5,
@@ -233,6 +237,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 31,
         month: 5,
@@ -247,6 +252,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 31,
         month: 5,
@@ -261,6 +267,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "ASSIGNED",
+      assignment: "backup",
       date: {
         day: 3,
         month: 6,
@@ -275,6 +282,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "ASSIGNED",
+      assignment: "backup",
       date: {
         day: 3,
         month: 6,
@@ -348,7 +356,8 @@ export const slots = {
       day: "Thursday",
       start_hour: "11:00",
       end_hour: "12:00",
-      status: "ASSIGNED",
+      status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 10,
         month: 6,
@@ -362,7 +371,8 @@ export const slots = {
       day: "Thursday",
       start_hour: "12:00",
       end_hour: "13:00",
-      status: "ASSIGNED",
+      status: "UNAVAILABLE",
+      assignment: "none",
       date: {
         day: 10,
         month: 6,
@@ -378,6 +388,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "ASSIGNED",
+      assignment: "backup",
       date: {
         day: 11,
         month: 6,
@@ -392,6 +403,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "ASSIGNED",
+      assignment: "backup",
       date: {
         day: 11,
         month: 6,

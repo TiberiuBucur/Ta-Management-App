@@ -12,13 +12,18 @@
   justify-content: space-between;
 }
 
+.slot-box a {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 .ASSIGNED {
   background-color: white;
-} 
+}
 
 .CLAIMED {
   background-color: var(--color-light-green);
-} 
+}
 
 .MISSED {
   background-color: var(--color-light-red);

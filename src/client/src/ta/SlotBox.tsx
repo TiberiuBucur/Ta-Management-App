@@ -26,11 +26,16 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
     }
   };
   const getExtraText = ({ assignment, status }: Slot): JSX.Element => {
-    switch (status.toLowerCase()) {
+    switch ((status as string).toLowerCase()) {
       case "missed":
         return <span>You have missed this slot</span>;
       case "ready_to_claim":
-        return <span>Click here to claim for this work hour</span>;
+        return (
+          <span>
+            <a href="https://www.google.com">Click here</a> to claim for this
+            work hour
+          </span>
+        );
       case "claimed":
         return <span>This work hour is claimed</span>;
       case "unavailable":
@@ -38,7 +43,7 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
       default:
         return (
           <span>
-            <a href="google.com">Click here</a>
+            <a href="https://www.google.com">Click here</a>
             {assignment === "backup"
               ? " to view any free channels"
               : " if you cannot attend this slot"}
