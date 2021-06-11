@@ -62,6 +62,7 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
           }
 
           if (event.target.className === "for-backup") {
+            setIsPopup(true);
             return;
           }
         };
@@ -79,29 +80,46 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
     }
   };
 
+  const mockChannels = [1, 2, 3, 4];
+
   return (
     <div className={`slot-box ${slot.status}`}>
       {isPopup && (
         <div className="popup">
-          <div>Are you sure you want to yield this slot?</div>
-          <div className="confirm-bttns">
-            <button
-              className="confirm-miss-slot-bttn"
-              onClick={() => {
-                // TODO: Change to missed / backup
-                // TODO: submit to backend
-                setIsPopup(false);
-              }}
-            >
-              Confirm
-            </button>
-            <button
-              className="cancel-miss-slot-bttn"
-              onClick={() => setIsPopup(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {slot.assignment === "backup" ? (
+            <div>
+              {mockChannels.map((no) => (
+                <button
+                  className="free-ch-bttn"
+                  onClick={() => setIsPopup(false)}
+                >
+                  Channel {no}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <div>Are you sure you want to yield this slot?</div>
+              <div className="confirm-bttns">
+                <button
+                  className="confirm-miss-slot-bttn"
+                  onClick={() => {
+                    // TODO: Change to missed / backup
+                    // TODO: submit to backend
+                    setIsPopup(false);
+                  }}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="cancel-miss-slot-bttn"
+                  onClick={() => setIsPopup(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
