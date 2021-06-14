@@ -23,6 +23,13 @@ server.post("/newavail/:username", async (req, res) => {
   res.status(200).send({ msg });
 });
 
+server.get("/sessions", async (req: any, res: any) => {
+  try { 
+    const recs: RecurringSlot[] = await postgre.getRecurring();
+    res.status(200).send({ recs });
+  } catch (err) { console.log(err); }
+});
+
 server.get("/schedule/:shortcode", async (req, res) => {
   const { shortcode } = req.params;
   try {
@@ -43,7 +50,7 @@ server.post("/submitallsessions", async (req, res) => {
   const { slots, recurring } = req.body;
   console.log(slots);
   const data: Slot[] = slots.map(s => slotFromJson(s));
-  const recurrings: RecurringSlot[] = recurring.map(r => recurringSlotFromString(r));
+  let recurrings: RecurringSlot[] = (recurring || []).map(r => recurringSlotFromString(r));
 
   try {
     const msg = await handler.submitSessions(data, recurrings);
@@ -57,13 +64,13 @@ server.post("/submitallsessions", async (req, res) => {
 server.get("/allavailabilities", async (_, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
-  
+
   res.status(200).json({ rows })
 });
 
 server.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
-  
+
 })
 
 

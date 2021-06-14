@@ -104,8 +104,20 @@ class Postgre {
     return qresult.rows[0];
   }
 
-  public async setRecurring(recurrings: RecurringSlot[]): Promise<void> {
+  public async getRecurring(): Promise<RecurringSlot[]> {
+    const recs: any = await pool.query(`SELECT day, startH, endH FROM ${RECURRING_SLOTS_TABLE};`);
+    return recs.rows.map(rec => { return `${rec.day} ${rec.starth} - ${rec.endh}`; });
+  }
 
+  public async setRecurring(recurrings: RecurringSlot[]): Promise<void> {
+    try {
+      for (const rec of recurrings) {
+        await pool.query(`INSERT INTO ${RECURRING_SLOTS_TABLE} (day, startH, endH) VALUES ($1, $2, $3);`, [rec.day, rec.startH, rec.endH]); 
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   public async setSessions(slots: Slot[]): Promise<void> {
@@ -152,6 +164,7 @@ const pool: Pool = prodMode
     port: 5432,
   });
 
-const postgre = new Postgre(pool);
+const postgre: Postgre = new Postgre(pool);
+
 
 export { postgre, pool };
