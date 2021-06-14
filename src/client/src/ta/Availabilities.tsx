@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-const Availabilities = ({shortCode} : {shortCode: string}) => {
+const Availabilities = ({ shortCode }: { shortCode: string }) => {
   const [username, setUsername] = useState("");
   const [msg, setMsg] = useState("");
   const [selection, setSelection] = useState({
@@ -7,16 +7,24 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
     Thu: "None",
     Fri: "None",
   });
-  const handleSubmit = async () => {
-    console.log("Submitted: " + selection);
-    console.log("Username: " + username);
 
-    if (username === "") {
-      alert("Please enter a non-empty username");
-      return;
-    }
+  const fetchSessions = async (): Promise<{ sessions: string[] }> => {
+    const response = await fetch("/sessions", {
+      method: "GET",
+      mode: "same-origin",
+      cache: "no-cache",
+      credentials: "same-origin",
+    });
 
-    const response = await fetch(`/newavail/${username}`, {
+    const body = await response.json();
+
+    // De ex: ["Monday 11:00 - 13:00",
+    // "Thursday 11:00 - 13:00", "Friday 11:00 - 13:00"]
+    return body as { sessions: string[] };
+  };
+
+  const declareAvail = async (shortcd: string): Promise<string> => {
+    const response = await fetch(`/newavail/${shortcd}`, {
       method: "POST",
       mode: "same-origin",
       cache: "no-cache",
@@ -28,7 +36,21 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
     });
     const body = await response.json();
 
-    setMsg(body.msg);
+    return body.msg;
+  };
+
+  const handleSubmit = async () => {
+    console.log("Submitted: " + selection);
+    console.log("Username: " + username);
+
+    if (username === "") {
+      alert("Please enter a non-empty username");
+      return;
+    }
+
+    const msg: string = await declareAvail(username);
+
+    setMsg(msg);
   };
 
   return (
@@ -40,7 +62,7 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
           <select
             style={{ marginLeft: "10px" }}
             defaultValue={selection.Mon}
-            onChange={(event) => {
+            onChange={event => {
               const res = { ...selection, Mon: event.target.value };
               console.log(res);
               setSelection(res);
@@ -57,7 +79,7 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
           <select
             style={{ marginLeft: "10px" }}
             defaultValue={selection.Thu}
-            onChange={(event) => {
+            onChange={event => {
               const res = { ...selection, Thu: event.target.value };
               console.log(res);
               setSelection(res);
@@ -74,7 +96,7 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
           <select
             style={{ marginLeft: "10px" }}
             defaultValue={selection.Fri}
-            onChange={(event) => {
+            onChange={event => {
               const res = { ...selection, Fri: event.target.value };
               console.log(res);
               setSelection(res);
@@ -93,7 +115,7 @@ const Availabilities = ({shortCode} : {shortCode: string}) => {
         type="text"
         placeholder="username"
         value={username}
-        onChange={(event) => {
+        onChange={event => {
           setUsername(event.currentTarget.value);
         }}
       />
@@ -118,4 +140,4 @@ const Intro = () => {
   );
 };
 
-export default Availabilities
+export default Availabilities;

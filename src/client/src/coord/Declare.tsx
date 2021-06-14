@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import Slot, {
-  cmpSlots,
-  prettyDate,
-} from "./Slot";
+import Slot, { cmpSlots, prettyDate } from "./Slot";
 import "./Declare.css";
 
 const weekDays = [
   "Monday",
   "Tuesday",
   "Wednesday",
-  "Thursday", 
+  "Thursday",
   "Friday",
   "Saturday",
-  "Sunday"
-]
+  "Sunday",
+];
 
 const mkSlots = (
   startH: string,
@@ -26,20 +23,18 @@ const mkSlots = (
 
   const noSlots = recurring ? 10 : 1;
   new Array(noSlots).fill(undefined).forEach(ignored => {
-    res.push(
-      {
-        day: weekDays[date.getDay() - 1],
-        startH,
-        endH,
-        date: {
-          day: date.getUTCDate(),
-          month: date.getMonth() + 1,
-          year: date.getUTCFullYear(),
-        },
-      }
-    )
+    res.push({
+      day: weekDays[date.getDay() - 1],
+      startH,
+      endH,
+      date: {
+        day: date.getUTCDate(),
+        month: date.getMonth() + 1,
+        year: date.getUTCFullYear(),
+      },
+    });
     date.setDate(date.getDate() + 7);
-  })
+  });
 
   return res;
 };
@@ -53,7 +48,14 @@ const Declare = () => {
   const [date, setDate] = useState("");
   const [isRec, setIsRec] = useState(false);
 
+  const [rec, setRec] = useState<string[]>([]);
+
   const handleAdd = () => {
+    if (isRec)
+      setRec(prev => [
+        ...prev,
+        `${weekDays[new Date(date).getDay() - 1]} ${startH} - ${endH}`,
+      ]);
     setSlots([...slots, ...mkSlots(startH, endH, date, isRec)]);
   };
 
@@ -66,18 +68,18 @@ const Declare = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({slots}),
+      body: JSON.stringify({ slots, recurring: rec }),
     });
-    
+
     const data = await response.json();
 
     console.log(data);
-  }
+  };
 
   const SlotRow = (slot: Slot, index: number) => {
     const oddClass = index % 2 === 1 ? "odd-index" : "";
     return (
-      <div className={"slot-row " +  oddClass} key={JSON.stringify(slot)}>
+      <div className={"slot-row " + oddClass} key={JSON.stringify(slot)}>
         <span className="property">
           Day: <span className="bolden">{slot.day}</span>
         </span>
@@ -95,17 +97,18 @@ const Declare = () => {
         <button
           className="remove-bttn"
           onClick={() => {
-            setSlots(slots.filter((s) => s !== slot));
+            setSlots(slots.filter(s => s !== slot));
           }}
         >
           REMOVE
         </button>
       </div>
     );
-  } 
+  };
 
-  const newSlots: Slot[] = [...new Set(slots.map(s => JSON.stringify(s)))]
-    .map(s => JSON.parse(s));
+  const newSlots: Slot[] = [
+    ...new Set(slots.map(s => JSON.stringify(s))),
+  ].map(s => JSON.parse(s));
 
   if (newSlots.length !== slots.length) setSlots(newSlots);
 
@@ -114,29 +117,37 @@ const Declare = () => {
       <div className="session-selector">
         <div className="selection">
           Start hour:
-          <input className="hour-input"
+          <input
+            className="hour-input"
             type="time"
             value={startH}
-            onChange={(e) => setStartH(e.target.value)}
+            onChange={e => setStartH(e.target.value)}
           />
         </div>
         <div className="selection">
           End hour:
-          <input className="hour-input"
+          <input
+            className="hour-input"
             type="time"
             value={endH}
-            onChange={(e) => setEndH(e.target.value)}
+            onChange={e => setEndH(e.target.value)}
           />
         </div>
         <div className="selection">
           Date:
-          <input value={date} type="date" onChange={(e) => setDate(e.target.value)} />
+          <input
+            value={date}
+            type="date"
+            onChange={e => setDate(e.target.value)}
+          />
         </div>
         <div className="selection">
           Recurring?
           <input
             type="checkbox"
-            onChange={(e) => {setIsRec((prev) => !prev)}}
+            onChange={e => {
+              setIsRec(prev => !prev);
+            }}
             checked={isRec}
           />
         </div>
@@ -145,9 +156,17 @@ const Declare = () => {
         </button>
       </div>
       <div className="sessions-view">
-        {slots.length !== 0 ? slots.sort(cmpSlots).map(SlotRow) 
-          : <div className="slot-row"> Insert the lab session slots for this term </div>}
-        <button className="submit-bttn" onClick={handleSubmit}>SUBMIT</button>
+        {slots.length !== 0 ? (
+          slots.sort(cmpSlots).map(SlotRow)
+        ) : (
+          <div className="slot-row">
+            {" "}
+            Insert the lab session slots for this term{" "}
+          </div>
+        )}
+        <button className="submit-bttn" onClick={handleSubmit}>
+          SUBMIT
+        </button>
       </div>
     </div>
   );
