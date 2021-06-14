@@ -267,7 +267,7 @@ export const slots = {
       start_hour: "11:00",
       end_hour: "12:00",
       status: "ASSIGNED",
-      assignment: "backup",
+      assignment: 3,
       date: {
         day: 3,
         month: 6,
@@ -282,7 +282,7 @@ export const slots = {
       start_hour: "12:00",
       end_hour: "13:00",
       status: "ASSIGNED",
-      assignment: "backup",
+      assignment: 3,
       date: {
         day: 3,
         month: 6,
