@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Slot from "./Slot";
 import "./SlotBox.css";
 
-const SlotBox = ({ slot }: { slot: Slot }) => {
+const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
   const [isPopup, setIsPopup] = useState(false);
 
   const getDateText = (slot: Slot): string =>
@@ -91,11 +91,25 @@ const SlotBox = ({ slot }: { slot: Slot }) => {
         <div className="popup">
           {slot.assignment === "backup" ? (
             <div>
-              {mockChannels.map(no => (
+              {mockChannels.map((no) => (
                 <button
                   key={no}
                   className="free-ch-bttn"
-                  onClick={() => setIsPopup(false)}
+                  onClick={() => {
+                    setSlots((prev: Slot[]) => {
+                      const copy = [...prev];
+                      const index = prev.findIndex((el) => el.id === slot.id);
+
+                      console.log(index);
+
+                      copy[index] = {
+                        ...slot,
+                        assignment: no,
+                      };
+                      return copy;
+                    });
+                    setIsPopup(false);
+                  }}
                 >
                   Channel {no}
                 </button>

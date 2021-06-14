@@ -48,11 +48,11 @@ const Schedule = (props: { shortCode: string }) => {
   useEffect(() => {
     let isMounted = true;
     fetchSlots()
-      .then(ss => {
+      .then((ss) => {
         console.log("Received", ss);
         if (isMounted) setSlots(ss);
       })
-      .catch(err => alert("Something went wrong"));
+      .catch((err) => alert("Something went wrong"));
     setTimeout(scrollToNext, 1000);
 
     return () => {
@@ -119,8 +119,8 @@ const Schedule = (props: { shortCode: string }) => {
                   {isNext ? (
                     <span className="hook" ref={nextSessionRef}></span>
                   ) : undefined}
-                  <SlotBox slot={slot1} />
-                  <SlotBox slot={slot2} />
+                  <SlotBox slot={slot1} setSlots={setSlots} />
+                  <SlotBox slot={slot2} setSlots={setSlots} />
                 </div>
               );
             })}
