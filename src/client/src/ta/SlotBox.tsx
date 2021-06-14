@@ -98,9 +98,7 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
                   onClick={() => {
                     setSlots((prev: Slot[]) => {
                       const copy = [...prev];
-                      const index = prev.findIndex((el) => el.id === slot.id);
-
-                      console.log(index);
+                      const index = copy.findIndex((el) => el.id === slot.id);
 
                       copy[index] = {
                         ...slot,
@@ -126,6 +124,17 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
                   onClick={() => {
                     // TODO: Change to missed / backup
                     // TODO: submit to backend
+
+                    setSlots((prev: Slot[]) => {
+                      const copy = [...prev];
+                      const index = copy.findIndex((el) => el.id === slot.id);
+
+                      copy[index] = {
+                        ...slot,
+                        assignment: "backup",
+                      };
+                      return copy;
+                    });
                     setIsPopup(false);
                   }}
                 >
