@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Login.css";
 
 interface Props {
   setShortCode: any;
@@ -7,7 +8,7 @@ interface Props {
 const Login = ({ setShortCode }: Props) => {
   const [input, setInput] = useState("");
   return (
-    <div>
+    <div className="login-page">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -20,7 +21,7 @@ const Login = ({ setShortCode }: Props) => {
           placeholder="imperial shortcode"
           onChange={(e) => setInput(e.target.value)}
         />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" id="submit-input" />
       </form>
     </div>
   );

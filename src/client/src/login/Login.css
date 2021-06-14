@@ -1,0 +1,17 @@
+.login-page input {
+  padding: 10px;
+  margin: 20px;
+  margin-right: 0px;
+  font-size: 15px;
+  border: none;
+  background-color: var(--color-light-grey);
+}
+
+.login-page #submit-input {
+  background-color: var(--color-blue);
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  margin-left: 5px;
+}
