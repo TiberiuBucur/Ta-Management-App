@@ -1,4 +1,4 @@
-import { Slot } from './Slot';
+import { RecurringSlot, Slot } from './Slot';
 
 const invalid = availability => {
   const vals = Object.values(availability);
@@ -24,8 +24,9 @@ function Handler(db) {
     return JSON.parse(row.availability);
   }
 
-  this.submitSessions = async function (slots: Slot[]): Promise<void> {
-    this.db.setSessions(slots);
+  this.submitSessions = async function (slots: Slot[], recurrings: RecurringSlot[]): Promise<void> {
+    await this.db.setSessions(slots);
+    await this.db.setRecurring(recurrings);
   }
 }
 

@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import Handler from "./handler";
 import { postgre } from "./db/postgre";
-import { slotFromJson } from "./Slot";
+import { Slot, slotFromJson, recurringSlotFromString, RecurringSlot } from "./Slot";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -40,13 +40,18 @@ server.get("/schedule/:shortcode", async (req, res) => {
 });
 
 server.post("/submitallsessions", async (req, res) => {
-  const { slots } = req.body;
+  const { slots, recurring } = req.body;
   console.log(slots);
-  const data = slots.map(s => slotFromJson(s));
+  const data: Slot[] = slots.map(s => slotFromJson(s));
+  const recurrings: RecurringSlot[] = recurring.map(r => recurringSlotFromString(r));
 
-  const msg = await handler.submitSessions(data);
-  
-  res.status(200).send({ msg });
+  try {
+    const msg = await handler.submitSessions(data, recurrings);
+    res.status(200).send({ msg });
+  } catch (err) {
+    console.log(err);
+    res.status(404).send();
+  }
 });
 
 server.get("/allavailabilities", async (_, res) => {
@@ -60,6 +65,7 @@ server.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
   
 })
+
 
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

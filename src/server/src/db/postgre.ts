@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { Slot } from "../Slot";
+import { RecurringSlot, Slot } from "../Slot";
 import { mockDataForTables } from "./initsAndMocks";
 
 
@@ -9,6 +9,7 @@ console.log(`PRODUCTION MODE: ${prodMode}`);
 export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
 export const LAB_SLOTS_TABLE: string = "lab_slots";
 export const TAS_TABLE: string = "tas_table";
+export const RECURRING_SLOTS_TABLE: string = "recurring_slots";
 
 type DayOfWeek = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
@@ -103,7 +104,11 @@ class Postgre {
     return qresult.rows[0];
   }
 
-  public async setSessions(slots: Slot[]) {
+  public async setRecurring(recurrings: RecurringSlot[]): Promise<void> {
+
+  }
+
+  public async setSessions(slots: Slot[]): Promise<void> {
     // Clears old sessions from database. TODO: change this if necessary
     await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE}`);
     await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
