@@ -12,6 +12,10 @@
   --color-dark-grey: #2f363a;
 }
 
+ul {
+  list-style: none;
+}
+
 .bolden {
   font-weight: bold;
 }
