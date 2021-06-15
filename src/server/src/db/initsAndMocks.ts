@@ -7,14 +7,9 @@ import {
   RECURRING_SLOTS_TABLE,
   TAS_AVAILABILITIES_TABLE,
 } from "./postgre";
-import { Slot } from "../Slot";
-
-enum Priority {
-  MAX = 1,
-  MID = 2,
-  LOW = 3,
-  NONE = 4,
-}
+import { RecurringSlot, Slot, Priority, Availability } from "../Slot";
+import { assert } from "console";
+import { NONAME } from "dns";
 
 async function logTasScheduleTable(): Promise<void> {
   return await pool
@@ -84,11 +79,14 @@ export async function mockTasAvailabilities(): Promise<void> {
     [Priority.LOW, Priority.MID, Priority.MAX],
     [Priority.NONE, Priority.MAX, Priority.MID],
     [Priority.MID, Priority.MAX, Priority.LOW],
-    [Priority.MAX, Priority.NONE, Priority.LOW],
-    [Priority.NONE, Priority.MID, Priority.LOW],
+    [Priority.MAX, Priority.NONE, Priority.MID],
+    [Priority.NONE, Priority.MAX, Priority.MID],
     [Priority.NONE, Priority.MID, Priority.MAX],
     [Priority.LOW, Priority.MID, Priority.MAX],
-    [Priority.LOW, Priority.NONE, Priority.MID],
+    [Priority.MID, Priority.NONE, Priority.MAX],
+    [Priority.NONE, Priority.NONE, Priority.MAX],
+    [Priority.NONE, Priority.MAX, Priority.NONE],
+    [Priority.MAX, Priority.NONE, Priority.NONE],
   ];
 
   console.log("Trying to add availability mocks");
@@ -210,6 +208,127 @@ function mockStatus(i: number): string | null {
     default:
       return "ASSIGNED"; // In case we add more than 5 mocked dates
   }
+}
+
+function numberNones(a: Availability[], noSessions: number) {
+  let res = 0;
+  for (let i = 0; i < noSessions; i++) {
+    if (a[i].priority === Priority.NONE) {
+      res++;
+    }
+  }
+  return res;
+}
+
+export async function scheduleAlgo() {
+  const recurring_slots: RecurringSlot[] =
+    await postgre.getRecurringSlotsData();
+  const recs: Availability[] = await postgre.getAvailabilites();
+  const noSessions = recurring_slots.length;
+
+  const noTAs = recs.length / noSessions;
+
+  let availabilities: Availability[][] = new Array<Availability[]>(noTAs);
+
+  for (let i = 0; i < noTAs; i++) {
+    availabilities[i] = new Array<Availability>(noSessions);
+  }
+
+  const tasPerSession = Math.floor(noTAs / noSessions);
+  let leftOverSlots = noTAs - tasPerSession * noSessions;
+
+  availabilities[0][0] = recs[0];
+  let bucket = 0;
+  let pos = 0;
+  for (let i = 1; i < recs.length; i++) {
+    if (recs[i].shortcode !== recs[i - 1].shortcode) {
+      bucket++;
+      pos = 0;
+    } else {
+      pos++;
+    }
+    availabilities[bucket][pos] = recs[i];
+  }
+
+  availabilities.sort((a, b) => {
+    const diff = numberNones(a, noSessions) - numberNones(b, noSessions);
+    if (diff === 0) {
+      return Math.random() - 0.5;
+    }
+    return -diff;
+  });
+
+  let slotsFree: number[] = new Array<number>(noSessions);
+  const totalSlotsFree = () => {
+    let res = 0;
+    for (let i = 0; i < noSessions; i++) {
+      res += slotsFree[i];
+    }
+    return res;
+  };
+
+  for (let i = 0; i < noSessions; i++) {
+    if (leftOverSlots > 0) {
+      slotsFree[i] = tasPerSession + 1;
+      leftOverSlots--;
+    } else {
+      slotsFree[i] = tasPerSession;
+    }
+  }
+
+  let hasBackup: boolean[] = new Array<boolean>(noTAs);
+  let priCrt: number[] = new Array<number>(noTAs);
+  for (let i = 0; i < noTAs; i++) {
+    hasBackup[i] = false;
+    priCrt[i] = 0;
+  }
+
+  while (totalSlotsFree() > 0) {
+    for (let i = 0; i < noTAs; i++) {
+      let j = priCrt[i];
+      const avail = availabilities[i];
+      while (
+        j < noSessions &&
+        avail[j].priority !== Priority.NONE &&
+        slotsFree[avail[j].recurring_id - 1] === 0
+      ) {
+        if (!hasBackup[i]) {
+          // only one backup per week is allowed to every student
+          avail[j].assigned = "backup";
+          hasBackup[i] = true;
+        }
+        j++;
+      }
+
+      if (j < noSessions && avail[j].priority !== Priority.NONE) {
+        let rec_id = avail[j].recurring_id - 1;
+        avail[j].assigned = slotsFree[rec_id];
+        slotsFree[rec_id]--;
+        j++;
+      }
+      priCrt[i] = j;
+    }
+  }
+
+  let ok = true;
+  for (let i = 0; i < noTAs; i++) {
+    let assigned = 0;
+    for (let j = 0; j < noSessions; j++) {
+      if (
+        availabilities[i][j].assigned !== "none" &&
+        availabilities[i][j].assigned !== "backup"
+      ) {
+        assigned++;
+      }
+    }
+    if (assigned !== 1) {
+      ok = false;
+      break;
+    }
+  }
+  console.log(ok);
+
+  console.log(availabilities);
 }
 
 export { createAllTables, mockDataForTables };

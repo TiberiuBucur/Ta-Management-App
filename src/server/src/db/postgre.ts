@@ -1,9 +1,15 @@
 import { Pool } from "pg";
-import { RecurringSlot, Slot } from "../Slot";
+import {
+  Availability,
+  RecurringSlot,
+  recurringSlotFromString,
+  Slot,
+} from "../Slot";
 import {
   createAllTables,
   mockDataForTables,
   mockTasAvailabilities,
+  scheduleAlgo,
 } from "./initsAndMocks";
 
 const prodMode = process.env.DATABASE_URL !== undefined;
@@ -137,12 +143,56 @@ class Postgre {
     return qresult.rows[0];
   }
 
-  public async getRecurring(): Promise<RecurringSlot[]> {
-    const recs: any = await pool.query(
-      `SELECT day, startH, endH FROM ${RECURRING_SLOTS_TABLE};`
-    );
+  public async getRecurring(): Promise<string[]> {
+    let recs: any = [];
+    try {
+      recs = await pool.query(
+        `SELECT day, startH, endH FROM ${RECURRING_SLOTS_TABLE};`
+      );
+    } catch (err) {
+      console.log(err);
+      return;
+    }
     return recs.rows.map((rec) => {
       return `${rec.day} ${rec.starth} - ${rec.endh}`;
+    });
+  }
+
+  public async getRecurringSlotsData(): Promise<RecurringSlot[]> {
+    let recs: any = [];
+    try {
+      recs = await pool.query(`SELECT * FROM ${RECURRING_SLOTS_TABLE};`);
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+    return recs.rows.map((rec) => {
+      return {
+        id: rec.id,
+        day: rec.day,
+        startH: rec.starth,
+        endH: rec.endh,
+      };
+    });
+  }
+
+  public async getAvailabilites(): Promise<Availability[]> {
+    let recs: any = [];
+    try {
+      recs = await pool.query(
+        `SELECT shortcode, priority, recurring_id FROM ${TAS_AVAILABILITIES_TABLE} ORDER BY shortcode, priority;`
+      );
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+    return recs.rows.map((rec) => {
+      return {
+        shortcode: rec.shortcode,
+        priority: rec.priority,
+        recurring_id: rec.recurring_id,
+        assigned: "none",
+      };
     });
   }
 
@@ -210,5 +260,7 @@ const pool: Pool = prodMode
     });
 
 const postgre: Postgre = new Postgre(pool);
+
+scheduleAlgo();
 
 export { postgre, pool };
