@@ -1,4 +1,4 @@
-import { LAB_SLOTS_TABLE, TAS_SCHEDULE_TABLE, TAS_TABLE, pool, postgre } from "./postgre";
+import { LAB_SLOTS_TABLE, TAS_SCHEDULE_TABLE, TAS_TABLE, pool, postgre, RECURRING_SLOTS_TABLE } from "./postgre";
 import { Slot } from "../Slot";
 
 
@@ -41,15 +41,21 @@ export async function mockLabSlots(): Promise<void> {
 }
 
 async function createLabSlotsTable(): Promise<void> {
-  const createQ = `CREATE TABLE ${LAB_SLOTS_TABLE} (id SERIAL PRIMARY KEY, date DATE, startH TIME, endH TIME, term SMALLINT);`;
+  const createQ: string = `CREATE TABLE ${LAB_SLOTS_TABLE} (id SERIAL PRIMARY KEY, date DATE, startH TIME, endH TIME, term SMALLINT);`;
   await createTable(createQ, LAB_SLOTS_TABLE);
 }
 
-async function createAllTables() {
+async function createRecurringSlotsTable(): Promise<void> {
+  const createQ: string = `CREATE TABLE ${RECURRING_SLOTS_TABLE} (id SERIAL PRIMARY KEY, day VARCHAR(10), startH TIME, endH time);`; 
+  await createTable(createQ, RECURRING_SLOTS_TABLE);
+}
+
+async function createAllTables(): Promise<void> {
   try {
     await createLabSlotsTable();
     await createTasTable();
     await createTasScheduleTable();
+    await createRecurringSlotsTable();
   } catch (err) {
     console.log("Creating all of the tables failed");
   }

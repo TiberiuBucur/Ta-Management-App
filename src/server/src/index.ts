@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import Handler from "./handler";
 import { postgre } from "./db/postgre";
-import { slotFromJson } from "./Slot";
+import { Slot, slotFromJson, recurringSlotFromString, RecurringSlot } from "./Slot";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +23,13 @@ server.post("/newavail/:username", async (req, res) => {
   res.status(200).send({ msg });
 });
 
+server.get("/sessions", async (req: any, res: any) => {
+  try { 
+    const recs: RecurringSlot[] = await postgre.getRecurring();
+    res.status(200).send({ recs });
+  } catch (err) { console.log(err); }
+});
+
 server.get("/schedule/:shortcode", async (req, res) => {
   const { shortcode } = req.params;
   try {
@@ -40,26 +47,32 @@ server.get("/schedule/:shortcode", async (req, res) => {
 });
 
 server.post("/submitallsessions", async (req, res) => {
-  const { slots } = req.body;
+  const { slots, recurring } = req.body;
   console.log(slots);
-  const data = slots.map(s => slotFromJson(s));
+  const data: Slot[] = slots.map(s => slotFromJson(s));
+  let recurrings: RecurringSlot[] = (recurring || []).map(r => recurringSlotFromString(r));
 
-  const msg = await handler.submitSessions(data);
-  
-  res.status(200).send({ msg });
+  try {
+    const msg = await handler.submitSessions(data, recurrings);
+    res.status(200).send({ msg });
+  } catch (err) {
+    console.log(err);
+    res.status(404).send();
+  }
 });
 
 server.get("/allavailabilities", async (_, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
-  
+
   res.status(200).json({ rows })
 });
 
 server.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
-  
+
 })
+
 
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
