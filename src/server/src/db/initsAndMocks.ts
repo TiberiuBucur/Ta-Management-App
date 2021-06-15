@@ -1,6 +1,12 @@
-import { LAB_SLOTS_TABLE, TAS_SCHEDULE_TABLE, TAS_TABLE, pool, postgre, RECURRING_SLOTS_TABLE } from "./postgre";
+import { LAB_SLOTS_TABLE, TAS_SCHEDULE_TABLE, TAS_TABLE, pool, postgre, RECURRING_SLOTS_TABLE, TAS_AVAILABILITIES_TABLE } from "./postgre";
 import { Slot } from "../Slot";
 
+enum Priority {
+  MAX = 1,
+  MID = 2,
+  LOW = 3,
+  NONE = 4
+}
 
 async function logTasScheduleTable(): Promise<void> {
   return await pool.query(`SELECT * from ${TAS_SCHEDULE_TABLE}`).then(r => console.log(r)).catch(err => console.log(err));
@@ -46,8 +52,25 @@ async function createLabSlotsTable(): Promise<void> {
 }
 
 async function createRecurringSlotsTable(): Promise<void> {
-  const createQ: string = `CREATE TABLE ${RECURRING_SLOTS_TABLE} (id SERIAL PRIMARY KEY, day VARCHAR(10), startH TIME, endH time);`; 
+  const createQ: string = `CREATE TABLE ${RECURRING_SLOTS_TABLE} (id SERIAL PRIMARY KEY, day VARCHAR(10), startH TIME, endH time);`;
   await createTable(createQ, RECURRING_SLOTS_TABLE);
+}
+
+
+async function createTaAvailabilitiesTable(): Promise<void> {
+  const createQ: string = `CREATE TABLE ${TAS_AVAILABILITIES_TABLE} (id SERIAL PRIMARY KEY, priority SMALLINT, \
+    recurring_id INT REFERENCES ${RECURRING_SLOTS_TABLE}(id));`;
+  await createTable(createQ, TAS_AVAILABILITIES_TABLE);
+}
+
+async function mockTasAvailabilities(): Promise<void> {
+  const numUsers: number = 70;
+  // 3 zile si 4 * 3 * 2 optiuni
+  const options: number[][] = [[Priority.MAX, Priority.MID, Priority.LOW], [Priority.LOW, Priority.MID, Priority.MAX], [Priority.NONE, Priority.MAX, Priority.MID], [Priority.MID, Priority.MAX, Priority.LOW], [Priority.MAX, Priority.NONE, Priority.LOW], [Priority.NONE, Priority.MID, Priority.LOW], [Priority.NONE, Priority.MID, Priority.MAX], [Priority.LOW, Priority.MID, Priority.MAX], [Priority.LOW, Priority.NONE, Priority.MID]];
+  const optsLen: number = options.length;
+  for (let i = 0; i < numUsers; i++) {
+
+  }
 }
 
 async function createAllTables(): Promise<void> {
@@ -56,6 +79,7 @@ async function createAllTables(): Promise<void> {
     await createTasTable();
     await createTasScheduleTable();
     await createRecurringSlotsTable();
+    await createTaAvailabilitiesTable();
   } catch (err) {
     console.log("Creating all of the tables failed");
   }

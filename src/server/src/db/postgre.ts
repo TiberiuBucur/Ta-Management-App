@@ -10,6 +10,7 @@ export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
 export const LAB_SLOTS_TABLE: string = "lab_slots";
 export const TAS_TABLE: string = "tas_table";
 export const RECURRING_SLOTS_TABLE: string = "recurring_slots";
+export const TAS_AVAILABILITIES_TABLE: string = "tas_availabilities";
 
 type DayOfWeek = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
