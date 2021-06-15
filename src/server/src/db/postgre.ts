@@ -1,7 +1,10 @@
 import { Pool } from "pg";
 import { RecurringSlot, Slot } from "../Slot";
-import { mockDataForTables } from "./initsAndMocks";
-
+import {
+  createAllTables,
+  mockDataForTables,
+  mockTasAvailabilities,
+} from "./initsAndMocks";
 
 const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
@@ -12,23 +15,35 @@ export const TAS_TABLE: string = "tas_table";
 export const RECURRING_SLOTS_TABLE: string = "recurring_slots";
 export const TAS_AVAILABILITIES_TABLE: string = "tas_availabilities";
 
-type DayOfWeek = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+type DayOfWeek =
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
 
 function dayOfWeekFromNumber(d: number): DayOfWeek {
   switch (d) {
-      case 1 : return "Monday";
-      case 2 : return "Tuesday";
-      case 3 : return "Wednesday";
-      case 4 : return "Thursday";
-      case 5 : return "Friday";
-      case 6 : return "Saturday";
-      case 7 : return "Sunday";
+    case 1:
+      return "Monday";
+    case 2:
+      return "Tuesday";
+    case 3:
+      return "Wednesday";
+    case 4:
+      return "Thursday";
+    case 5:
+      return "Friday";
+    case 6:
+      return "Saturday";
+    case 7:
+      return "Sunday";
   }
 }
 
-
 class Postgre {
-
   public pool: Pool;
 
   constructor(pool: Pool) {
@@ -38,22 +53,37 @@ class Postgre {
   public async setAvailability(username: any, availability: any): Promise<any> {
     const isSet = await this.hasAvailability(username);
     const stringAvail = JSON.stringify(availability);
-    return isSet ? pool.query("UPDATE tas SET availability = $1 WHERE username = $2", [stringAvail, username])
-      : pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [username, stringAvail]);
+    return isSet
+      ? pool.query("UPDATE tas SET availability = $1 WHERE username = $2", [
+          stringAvail,
+          username,
+        ])
+      : pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [
+          username,
+          stringAvail,
+        ]);
   }
 
   public async hasAvailability(username: any): Promise<boolean> {
-    const qresult = await pool.query("SELECT * FROM tas where username = $1;", [username]);
+    const qresult = await pool.query("SELECT * FROM tas where username = $1;", [
+      username,
+    ]);
     return qresult.rows.length !== 0;
   }
 
   // TODO: fix nextsession.
-  public async getAvailability(shortcode: string): Promise<[any[] | null, object | null]> {
-    return await pool.query(`SELECT shortcode, slot_id, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
+  public async getAvailability(
+    shortcode: string
+  ): Promise<[any[] | null, object | null]> {
+    return await pool
+      .query(
+        `SELECT shortcode, slot_id, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
                              FROM tas_schedule JOIN lab_slots ON tas_schedule.slot_id = lab_slots.id \
-                             WHERE shortcode = $1;`, [shortcode])
-      .then(res => {
-        if (!res || !(res.rows) || res.rows.length === 0) {
+                             WHERE shortcode = $1;`,
+        [shortcode]
+      )
+      .then((res) => {
+        if (!res || !res.rows || res.rows.length === 0) {
           return [null, null];
         }
 
@@ -61,25 +91,25 @@ class Postgre {
         let closestTime = Number.MAX_VALUE;
         const now = Date.now();
 
-        // The times from the database are assumed to be UTC, but js's Date() 
+        // The times from the database are assumed to be UTC, but js's Date()
         // assumes we are constructing local time, so we need to add the UTC offset (in case the server
         // is running somewhere with no UTC) for accurate times
         const _ofs = new Date();
-        const ofs = - _ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
+        const ofs = -_ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
 
-        res.rows.forEach(slot => {
+        res.rows.forEach((slot) => {
           const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
           const diff = date.getTime() - now;
           if (diff < closestTime) {
-              closestTime = diff;
-              nextSession = date;
+            closestTime = diff;
+            nextSession = date;
           }
 
           slot.day = dayOfWeekFromNumber(date.getUTCDay());
           slot.date = {
             day: date.getDate(),
             month: date.getUTCMonth() + 1,
-            year: date.getUTCFullYear()
+            year: date.getUTCFullYear(),
           };
           if (!(slot.assignment === "backup" || slot.assignment === "none")) {
             // the assignment is a number
@@ -92,7 +122,7 @@ class Postgre {
           nextSess = {
             day: nextSession.getUTCDate(),
             month: nextSession.getUTCMonth() + 1,
-            year: nextSession.getUTCFullYear()
+            year: nextSession.getUTCFullYear(),
           };
         }
 
@@ -101,22 +131,30 @@ class Postgre {
   }
 
   public async getUserRow(username: any): Promise<any> {
-    const qresult = await pool.query("SELECT * FROM tas WHERE username = $1;", [username]);
+    const qresult = await pool.query("SELECT * FROM tas WHERE username = $1;", [
+      username,
+    ]);
     return qresult.rows[0];
   }
 
   public async getRecurring(): Promise<RecurringSlot[]> {
-    const recs: any = await pool.query(`SELECT day, startH, endH FROM ${RECURRING_SLOTS_TABLE};`);
-    return recs.rows.map(rec => { return `${rec.day} ${rec.starth} - ${rec.endh}`; });
+    const recs: any = await pool.query(
+      `SELECT day, startH, endH FROM ${RECURRING_SLOTS_TABLE};`
+    );
+    return recs.rows.map((rec) => {
+      return `${rec.day} ${rec.starth} - ${rec.endh}`;
+    });
   }
 
   public async setRecurring(recurrings: RecurringSlot[]): Promise<void> {
     try {
       for (const rec of recurrings) {
-        await pool.query(`INSERT INTO ${RECURRING_SLOTS_TABLE} (day, startH, endH) VALUES ($1, $2, $3);`, [rec.day, rec.startH, rec.endH]); 
+        await pool.query(
+          `INSERT INTO ${RECURRING_SLOTS_TABLE} (day, startH, endH) VALUES ($1, $2, $3);`,
+          [rec.day, rec.startH, rec.endH]
+        );
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   }
@@ -132,7 +170,14 @@ class Postgre {
 
       await pool.query(
         `INSERT INTO ${LAB_SLOTS_TABLE} (date, startH, endH, term) VALUES($1, $2, $3, $4);`,
-        [`${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`, startH, endH, term]
+        [
+          `${date.getUTCFullYear()}-${
+            date.getUTCMonth() + 1
+          }-${date.getUTCDate()}`,
+          startH,
+          endH,
+          term,
+        ]
       );
     }
   }
@@ -149,23 +194,21 @@ class Postgre {
   }
 }
 
-
 const pool: Pool = prodMode
   ? new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  })
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    })
   : new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "testdb",
-    password: "fghijbon8976",
-    port: 5432,
-  });
+      user: "postgres",
+      host: "localhost",
+      database: "testdb",
+      password: "fghijbon8976",
+      port: 5432,
+    });
 
 const postgre: Postgre = new Postgre(pool);
-
 
 export { postgre, pool };

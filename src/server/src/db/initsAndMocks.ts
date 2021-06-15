@@ -1,15 +1,26 @@
-import { LAB_SLOTS_TABLE, TAS_SCHEDULE_TABLE, TAS_TABLE, pool, postgre, RECURRING_SLOTS_TABLE, TAS_AVAILABILITIES_TABLE } from "./postgre";
+import {
+  LAB_SLOTS_TABLE,
+  TAS_SCHEDULE_TABLE,
+  TAS_TABLE,
+  pool,
+  postgre,
+  RECURRING_SLOTS_TABLE,
+  TAS_AVAILABILITIES_TABLE,
+} from "./postgre";
 import { Slot } from "../Slot";
 
 enum Priority {
   MAX = 1,
   MID = 2,
   LOW = 3,
-  NONE = 4
+  NONE = 4,
 }
 
 async function logTasScheduleTable(): Promise<void> {
-  return await pool.query(`SELECT * from ${TAS_SCHEDULE_TABLE}`).then(r => console.log(r)).catch(err => console.log(err));
+  return await pool
+    .query(`SELECT * from ${TAS_SCHEDULE_TABLE}`)
+    .then((r) => console.log(r))
+    .catch((err) => console.log(err));
 }
 
 async function mockDataForTables(): Promise<void> {
@@ -19,15 +30,14 @@ async function mockDataForTables(): Promise<void> {
   } catch (err) {
     console.log("Failed to mock data for all tables");
   }
-
 }
 
 // Add dummy values to the lab slots table in the DB.
 export async function mockLabSlots(): Promise<void> {
   const term: number = 3;
-  const startH: string = '12:00';
-  const endH: string = '13:00';
-  var date: Date = new Date('2021-6-15');
+  const startH: string = "12:00";
+  const endH: string = "13:00";
+  var date: Date = new Date("2021-6-15");
 
   const sessions: Slot[] = [];
   const sessionsNumber: number = 10;
@@ -56,21 +66,53 @@ async function createRecurringSlotsTable(): Promise<void> {
   await createTable(createQ, RECURRING_SLOTS_TABLE);
 }
 
-
 async function createTaAvailabilitiesTable(): Promise<void> {
-  const createQ: string = `CREATE TABLE ${TAS_AVAILABILITIES_TABLE} (id SERIAL PRIMARY KEY, priority SMALLINT, \
+  const createQ: string = `CREATE TABLE ${TAS_AVAILABILITIES_TABLE} (id SERIAL PRIMARY KEY, shortcode VARCHAR(30), priority SMALLINT, \
     recurring_id INT REFERENCES ${RECURRING_SLOTS_TABLE}(id));`;
   await createTable(createQ, TAS_AVAILABILITIES_TABLE);
 }
 
-async function mockTasAvailabilities(): Promise<void> {
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
+export async function mockTasAvailabilities(): Promise<void> {
   const numUsers: number = 70;
   // 3 zile si 4 * 3 * 2 optiuni
-  const options: number[][] = [[Priority.MAX, Priority.MID, Priority.LOW], [Priority.LOW, Priority.MID, Priority.MAX], [Priority.NONE, Priority.MAX, Priority.MID], [Priority.MID, Priority.MAX, Priority.LOW], [Priority.MAX, Priority.NONE, Priority.LOW], [Priority.NONE, Priority.MID, Priority.LOW], [Priority.NONE, Priority.MID, Priority.MAX], [Priority.LOW, Priority.MID, Priority.MAX], [Priority.LOW, Priority.NONE, Priority.MID]];
+  const options: number[][] = [
+    [Priority.MAX, Priority.MID, Priority.LOW],
+    [Priority.LOW, Priority.MID, Priority.MAX],
+    [Priority.NONE, Priority.MAX, Priority.MID],
+    [Priority.MID, Priority.MAX, Priority.LOW],
+    [Priority.MAX, Priority.NONE, Priority.LOW],
+    [Priority.NONE, Priority.MID, Priority.LOW],
+    [Priority.NONE, Priority.MID, Priority.MAX],
+    [Priority.LOW, Priority.MID, Priority.MAX],
+    [Priority.LOW, Priority.NONE, Priority.MID],
+  ];
+
+  console.log("Trying to add availability mocks");
+
   const optsLen: number = options.length;
   for (let i = 0; i < numUsers; i++) {
-
+    const config = getRandomInt(optsLen);
+    const createQ = (recurring_id) => {
+      return `INSERT INTO ${TAS_AVAILABILITIES_TABLE} (shortcode, priority, recurring_id) \
+              VALUES ('ta_${i}', ${
+        options[config][recurring_id - 1]
+      }, ${recurring_id})`;
+    };
+    try {
+      for (let j = 1; j <= 3; j++) {
+        const query: string = createQ(j);
+        await pool.query(query);
+      }
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   }
+  console.log("Added availabilities mocks successfully");
 }
 
 async function createAllTables(): Promise<void> {
@@ -116,8 +158,9 @@ async function mockTasSchedule(): Promise<void> {
     console.log("Introduced data successfully");
     console.log("Printing what we introduced:");
     await logTasScheduleTable();
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) { console.log(err); };
 }
 
 /*
@@ -137,7 +180,7 @@ async function mockTasScheduleHelper(): Promise<void> {
     const createQ = (slotId: number) => {
       return `INSERT INTO ${TAS_SCHEDULE_TABLE} (shortcode, slot_id, assignment, status) \
               VALUES ('${shortcode}${i}', ${slotId}, '${assignment}', '${status}');`;
-    }
+    };
 
     try {
       const r = createQ(slotsIds[i].id);
@@ -154,14 +197,19 @@ async function mockTasScheduleHelper(): Promise<void> {
 
 function mockStatus(i: number): string | null {
   switch (i) {
-    case 0: return "CLAIMED";
-    case 1: return "READY_TO_CLAIM";
-    case 2: return "MISSED";
-    case 3: return "ASSIGNED";
-    case 4: return "NEXT";
-    default: return "ASSIGNED"; // In case we add more than 5 mocked dates
+    case 0:
+      return "CLAIMED";
+    case 1:
+      return "READY_TO_CLAIM";
+    case 2:
+      return "MISSED";
+    case 3:
+      return "ASSIGNED";
+    case 4:
+      return "NEXT";
+    default:
+      return "ASSIGNED"; // In case we add more than 5 mocked dates
   }
 }
-
 
 export { createAllTables, mockDataForTables };
