@@ -1,9 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 import Slot from "./Slot";
 import "./SlotBox.css";
 
+const sock = io("ws://localhost:5555");
+sock.on("connect", () => {
+  console.log("CONNECTED");
+});
+(document as any).socca = sock;
+
 const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
   const [isPopup, setIsPopup] = useState(false);
+  // const sock = useRef<any>(
+  //   slot.status === "ASSIGNED" ? io.connect("http://localhost:5555") : undefined
+  // );
+
+  useEffect(() => {
+    // if (slot.status === "ASSIGNED") {
+    //   sock.current.on(`free_channel_for_${slot.id}`, (data: any) => {
+    //     console.log(data);
+    //   });
+    // }
+  }, []);
 
   const getDateText = (slot: Slot): string =>
     `${slot.day}, ${slot.date.day}/${slot.date.month}`;
@@ -91,14 +109,14 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
         <div className="popup">
           {slot.assignment === "backup" ? (
             <div>
-              {mockChannels.map((no) => (
+              {mockChannels.map(no => (
                 <button
                   key={no}
                   className="free-ch-bttn"
                   onClick={() => {
                     setSlots((prev: Slot[]) => {
                       const copy = [...prev];
-                      const index = copy.findIndex((el) => el.id === slot.id);
+                      const index = copy.findIndex(el => el.id === slot.id);
 
                       copy[index] = {
                         ...slot,
@@ -125,9 +143,15 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
                     // TODO: Change to missed / backup
                     // TODO: submit to backend
 
+                    console.log(sock);
+                    sock.emit("free_channel", {
+                      slotid: slot.id,
+                      channelNo: slot.assignment,
+                    });
+
                     setSlots((prev: Slot[]) => {
                       const copy = [...prev];
-                      const index = copy.findIndex((el) => el.id === slot.id);
+                      const index = copy.findIndex(el => el.id === slot.id);
 
                       copy[index] = {
                         ...slot,
