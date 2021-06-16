@@ -1,0 +1,1053 @@
+[
+  [
+    { shortcode: 'ta_14', priority: 1, recurring_id: 1, assigned: 24 },
+    {
+      shortcode: 'ta_14',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_14',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_54', priority: 1, recurring_id: 1, assigned: 23 },
+    {
+      shortcode: 'ta_54',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_54',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_55', priority: 1, recurring_id: 2, assigned: 23 },
+    {
+      shortcode: 'ta_55',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_55',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_5', priority: 1, recurring_id: 1, assigned: 22 },
+    {
+      shortcode: 'ta_5',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_5',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_22', priority: 1, recurring_id: 1, assigned: 21 },
+    {
+      shortcode: 'ta_22',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_22',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_1', priority: 1, recurring_id: 1, assigned: 20 },
+    {
+      shortcode: 'ta_1',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_1',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_46', priority: 1, recurring_id: 2, assigned: 22 },
+    {
+      shortcode: 'ta_46',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_46',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_4', priority: 1, recurring_id: 2, assigned: 21 },
+    {
+      shortcode: 'ta_4',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_4',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_20', priority: 1, recurring_id: 1, assigned: 19 },
+    {
+      shortcode: 'ta_20',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_20',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_9', priority: 1, recurring_id: 3, assigned: 23 },
+    {
+      shortcode: 'ta_9',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_9',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_45', priority: 1, recurring_id: 2, assigned: 20 },
+    {
+      shortcode: 'ta_45',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_45',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_0', priority: 1, recurring_id: 1, assigned: 18 },
+    {
+      shortcode: 'ta_0',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_0',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_24', priority: 1, recurring_id: 3, assigned: 22 },
+    {
+      shortcode: 'ta_24',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_24',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_6', priority: 1, recurring_id: 3, assigned: 21 },
+    {
+      shortcode: 'ta_6',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_6',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_64', priority: 1, recurring_id: 1, assigned: 17 },
+    {
+      shortcode: 'ta_64',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_64',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_44', priority: 1, recurring_id: 1, assigned: 16 },
+    {
+      shortcode: 'ta_44',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_44',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_28', priority: 1, recurring_id: 1, assigned: 15 },
+    {
+      shortcode: 'ta_28',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_28',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_48', priority: 1, recurring_id: 1, assigned: 14 },
+    {
+      shortcode: 'ta_48',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_48',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_37', priority: 1, recurring_id: 1, assigned: 13 },
+    {
+      shortcode: 'ta_37',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_37',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_7', priority: 1, recurring_id: 2, assigned: 19 },
+    {
+      shortcode: 'ta_7',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_7',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_42', priority: 1, recurring_id: 2, assigned: 18 },
+    {
+      shortcode: 'ta_42',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_42',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_60', priority: 1, recurring_id: 2, assigned: 17 },
+    {
+      shortcode: 'ta_60',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_60',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_33', priority: 1, recurring_id: 2, assigned: 16 },
+    {
+      shortcode: 'ta_33',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_33',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_38', priority: 1, recurring_id: 2, assigned: 15 },
+    {
+      shortcode: 'ta_38',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_38',
+      priority: 4,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_10', priority: 1, recurring_id: 1, assigned: 12 },
+    {
+      shortcode: 'ta_10',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_10',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_25', priority: 1, recurring_id: 2, assigned: 14 },
+    {
+      shortcode: 'ta_25',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_25',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_67', priority: 1, recurring_id: 1, assigned: 11 },
+    {
+      shortcode: 'ta_67',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_67',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_21', priority: 1, recurring_id: 3, assigned: 20 },
+    {
+      shortcode: 'ta_21',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_21',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_39', priority: 1, recurring_id: 2, assigned: 13 },
+    {
+      shortcode: 'ta_39',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_39',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_12', priority: 1, recurring_id: 1, assigned: 10 },
+    {
+      shortcode: 'ta_12',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_12',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_61', priority: 1, recurring_id: 3, assigned: 19 },
+    {
+      shortcode: 'ta_61',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_61',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_36', priority: 1, recurring_id: 2, assigned: 12 },
+    {
+      shortcode: 'ta_36',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_36',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_15', priority: 1, recurring_id: 3, assigned: 18 },
+    {
+      shortcode: 'ta_15',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_15',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_56', priority: 1, recurring_id: 2, assigned: 11 },
+    {
+      shortcode: 'ta_56',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_56',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_65', priority: 1, recurring_id: 3, assigned: 17 },
+    {
+      shortcode: 'ta_65',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_65',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_66', priority: 1, recurring_id: 1, assigned: 9 },
+    {
+      shortcode: 'ta_66',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_66',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_27', priority: 1, recurring_id: 1, assigned: 8 },
+    {
+      shortcode: 'ta_27',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_27',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_58', priority: 1, recurring_id: 3, assigned: 16 },
+    {
+      shortcode: 'ta_58',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_58',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_35', priority: 1, recurring_id: 3, assigned: 15 },
+    {
+      shortcode: 'ta_35',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_35',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_31', priority: 1, recurring_id: 2, assigned: 10 },
+    {
+      shortcode: 'ta_31',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_31',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_59', priority: 1, recurring_id: 2, assigned: 9 },
+    {
+      shortcode: 'ta_59',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_59',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_52', priority: 1, recurring_id: 2, assigned: 8 },
+    {
+      shortcode: 'ta_52',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_52',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_40', priority: 1, recurring_id: 1, assigned: 7 },
+    {
+      shortcode: 'ta_40',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_40',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_41', priority: 1, recurring_id: 2, assigned: 7 },
+    {
+      shortcode: 'ta_41',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_41',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_43', priority: 1, recurring_id: 2, assigned: 6 },
+    {
+      shortcode: 'ta_43',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_43',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_50', priority: 1, recurring_id: 2, assigned: 5 },
+    {
+      shortcode: 'ta_50',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_50',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_47', priority: 1, recurring_id: 2, assigned: 4 },
+    {
+      shortcode: 'ta_47',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_47',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_49', priority: 1, recurring_id: 3, assigned: 14 },
+    {
+      shortcode: 'ta_49',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_49',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_62', priority: 1, recurring_id: 1, assigned: 6 },
+    {
+      shortcode: 'ta_62',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_62',
+      priority: 4,
+      recurring_id: 2,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_8', priority: 1, recurring_id: 2, assigned: 3 },
+    {
+      shortcode: 'ta_8',
+      priority: 2,
+      recurring_id: 3,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_8',
+      priority: 4,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_69', priority: 1, recurring_id: 2, assigned: 2 },
+    {
+      shortcode: 'ta_69',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_69',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_63', priority: 1, recurring_id: 2, assigned: 1 },
+    {
+      shortcode: 'ta_63',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_63',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_57', priority: 1, recurring_id: 1, assigned: 5 },
+    {
+      shortcode: 'ta_57',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_57',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    {
+      shortcode: 'ta_53',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    { shortcode: 'ta_53', priority: 2, recurring_id: 1, assigned: 4 },
+    {
+      shortcode: 'ta_53',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_51', priority: 1, recurring_id: 3, assigned: 13 },
+    {
+      shortcode: 'ta_51',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_51',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_2', priority: 1, recurring_id: 3, assigned: 12 },
+    {
+      shortcode: 'ta_2',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_2',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    {
+      shortcode: 'ta_11',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    { shortcode: 'ta_11', priority: 2, recurring_id: 1, assigned: 3 },
+    {
+      shortcode: 'ta_11',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_16', priority: 1, recurring_id: 1, assigned: 2 },
+    {
+      shortcode: 'ta_16',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_16',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    {
+      shortcode: 'ta_19',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    { shortcode: 'ta_19', priority: 2, recurring_id: 1, assigned: 1 },
+    {
+      shortcode: 'ta_19',
+      priority: 3,
+      recurring_id: 3,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_32', priority: 1, recurring_id: 3, assigned: 11 },
+    {
+      shortcode: 'ta_32',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_32',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    {
+      shortcode: 'ta_17',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_17',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_17', priority: 3, recurring_id: 3, assigned: 10 }
+  ],
+  [
+    {
+      shortcode: 'ta_29',
+      priority: 1,
+      recurring_id: 1,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_29',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_29', priority: 3, recurring_id: 3, assigned: 9 }
+  ],
+  [
+    {
+      shortcode: 'ta_23',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_23',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_23', priority: 3, recurring_id: 3, assigned: 8 }
+  ],
+  [
+    {
+      shortcode: 'ta_26',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_26',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_26', priority: 3, recurring_id: 3, assigned: 7 }
+  ],
+  [
+    { shortcode: 'ta_3', priority: 1, recurring_id: 3, assigned: 6 },
+    {
+      shortcode: 'ta_3',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_3',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    {
+      shortcode: 'ta_13',
+      priority: 1,
+      recurring_id: 1,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_13',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_13', priority: 3, recurring_id: 3, assigned: 5 }
+  ],
+  [
+    {
+      shortcode: 'ta_18',
+      priority: 1,
+      recurring_id: 2,
+      assigned: 'backup'
+    },
+    {
+      shortcode: 'ta_18',
+      priority: 2,
+      recurring_id: 1,
+      assigned: 'none'
+    },
+    { shortcode: 'ta_18', priority: 3, recurring_id: 3, assigned: 4 }
+  ],
+  [
+    { shortcode: 'ta_30', priority: 1, recurring_id: 3, assigned: 3 },
+    {
+      shortcode: 'ta_30',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_30',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_34', priority: 1, recurring_id: 3, assigned: 2 },
+    {
+      shortcode: 'ta_34',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_34',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ],
+  [
+    { shortcode: 'ta_68', priority: 1, recurring_id: 3, assigned: 1 },
+    {
+      shortcode: 'ta_68',
+      priority: 2,
+      recurring_id: 2,
+      assigned: 'none'
+    },
+    {
+      shortcode: 'ta_68',
+      priority: 3,
+      recurring_id: 1,
+      assigned: 'none'
+    }
+  ]
+]
+

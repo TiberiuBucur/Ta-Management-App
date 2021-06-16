@@ -51,8 +51,9 @@ const Schedule = (props: { shortCode: string }) => {
       .then(ss => {
         console.log("Received", ss);
         if (isMounted) setSlots(ss);
+        return true;
       })
-      .catch(err => alert("Something went wrong"));
+      .catch(err => { console.log(err); alert("Something went wrong while fetching slots"); });
     setTimeout(scrollToNext, 1000);
 
     return () => {

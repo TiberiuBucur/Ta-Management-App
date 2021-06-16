@@ -2,7 +2,12 @@ import express from "express";
 import path from "path";
 import Handler from "./handler";
 import { postgre } from "./db/postgre";
-import { Slot, slotFromJson, recurringSlotFromString, RecurringSlot } from "./Slot";
+import {
+  Slot,
+  slotFromJson,
+  recurringSlotFromString,
+  RecurringSlot,
+} from "./Slot";
 
 const server = express();
 const PORT = process.env.PORT || 5000;
@@ -24,10 +29,12 @@ server.post("/newavail/:username", async (req, res) => {
 });
 
 server.get("/sessions", async (req: any, res: any) => {
-  try { 
-    const recs: RecurringSlot[] = await postgre.getRecurring();
+  try {
+    const recs: string[] = await postgre.getRecurring();
     res.status(200).send({ recs });
-  } catch (err) { console.log(err); }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 server.get("/schedule/:shortcode", async (req, res) => {
@@ -40,17 +47,26 @@ server.get("/schedule/:shortcode", async (req, res) => {
       return;
     }
     const term = avails[0].term;
-    res.status(200).json({ shortcode: shortcode, term: term, nextsession: nextSession, slots: avails });
+    res
+      .status(200)
+      .json({
+        shortcode: shortcode,
+        term: term,
+        nextsession: nextSession,
+        slots: avails,
+      });
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) { console.log(err) };
-
 });
 
 server.post("/submitallsessions", async (req, res) => {
   const { slots, recurring } = req.body;
   console.log(slots);
-  const data: Slot[] = slots.map(s => slotFromJson(s));
-  let recurrings: RecurringSlot[] = (recurring || []).map(r => recurringSlotFromString(r));
+  const data: Slot[] = slots.map((s) => slotFromJson(s));
+  let recurrings: RecurringSlot[] = (recurring || []).map((r) =>
+    recurringSlotFromString(r)
+  );
 
   try {
     const msg = await handler.submitSessions(data, recurrings);
@@ -65,14 +81,12 @@ server.get("/allavailabilities", async (_, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
 
-  res.status(200).json({ rows })
+  res.status(200).json({ rows });
 });
 
 server.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
-
-})
-
+});
 
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

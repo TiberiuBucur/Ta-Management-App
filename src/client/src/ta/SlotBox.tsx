@@ -78,6 +78,7 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
           </span>
         );
       default:
+        console.log(`status ${status}`);
         alert("Something went wrong");
         return <span></span>;
     }
