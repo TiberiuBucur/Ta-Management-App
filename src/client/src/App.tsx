@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import IO from "socket.io-client";
 import Login from "./login/Login";
 import {
   BrowserRouter as Router,

@@ -8,6 +8,7 @@ import {
   recurringSlotFromString,
   RecurringSlot,
 } from "./Slot";
+import { sample1, sample2 } from "./Samples";
 
 const io = require("socket.io")(5555, {
   cors: {
@@ -17,12 +18,10 @@ const io = require("socket.io")(5555, {
 
 io.on("connection", socket => {
   console.log(socket.id);
-  socket
-    .on("free_channel", (data: any) => {
-      console.log("NEW FREE CHANNEL", data);
-      io.emit(`free_channel_for_${data.slotid}`, data.channelNo);
-    })
-    .setMaxListeners(0);
+  socket.on("free_channel", (data: any) => {
+    console.log("NEW FREE CHANNEL", data);
+    io.emit(`free_channel_for_${data.slotid}`, data.channelNo);
+  });
 }).setMaxListeners(0);
 
 const server = express();
@@ -55,6 +54,13 @@ server.get("/sessions", async (req: any, res: any) => {
 
 server.get("/schedule/:shortcode", async (req, res) => {
   const { shortcode } = req.params;
+
+  if (shortcode === "sample1") {
+    res.status(200).json(sample1);
+  } else if (shortcode === "sample2") {
+    res.status(200).json(sample2);
+  }
+
   try {
     // TODO: change any to a concrete type after merging with frontend (type defined on FE)
     const [avails, nextSession] = await postgre.getAvailability(shortcode);
