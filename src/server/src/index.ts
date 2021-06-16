@@ -47,14 +47,12 @@ server.get("/schedule/:shortcode", async (req, res) => {
       return;
     }
     const term = avails[0].term;
-    res
-      .status(200)
-      .json({
-        shortcode: shortcode,
-        term: term,
-        nextsession: nextSession,
-        slots: avails,
-      });
+    res.status(200).json({
+      shortcode: shortcode,
+      term: term,
+      nextsession: nextSession,
+      slots: avails,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -63,8 +61,8 @@ server.get("/schedule/:shortcode", async (req, res) => {
 server.post("/submitallsessions", async (req, res) => {
   const { slots, recurring } = req.body;
   console.log(slots);
-  const data: Slot[] = slots.map((s) => slotFromJson(s));
-  let recurrings: RecurringSlot[] = (recurring || []).map((r) =>
+  const data: Slot[] = slots.map(s => slotFromJson(s));
+  let recurrings: RecurringSlot[] = (recurring || []).map(r =>
     recurringSlotFromString(r)
   );
 
@@ -74,6 +72,15 @@ server.post("/submitallsessions", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(404).send();
+  }
+});
+
+server.post("/computesched", async (req, res) => {
+  try {
+    await postgre.makeTasSchedule();
+    res.status(200).json({ msg: "Successfully created a schedule." });
+  } catch (err) {
+    res.status(200).json({ msg: "Something went wrong with the database" });
   }
 });
 
