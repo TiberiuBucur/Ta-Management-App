@@ -7,7 +7,7 @@ import {
   RECURRING_SLOTS_TABLE,
   TAS_AVAILABILITIES_TABLE,
 } from "./postgre";
-import { RecurringSlot, Slot, Priority, Availability } from "../Slot";
+import { RecurringSlot, Slot, DbSlot, Priority, Availability, DbRecurringSlot, SlotStatus } from "../Slot";
 import { assert } from "console";
 import { NONAME } from "dns";
 
@@ -120,6 +120,7 @@ async function createAllTables(): Promise<void> {
     await createTasScheduleTable();
     await createRecurringSlotsTable();
     await createTaAvailabilitiesTable();
+    console.log("Creation of all tables succesful!");
   } catch (err) {
     console.log("Creating all of the tables failed");
   }
@@ -220,8 +221,8 @@ function numberNones(a: Availability[], noSessions: number) {
   return res;
 }
 
-export async function scheduleAlgo() {
-  const recurring_slots: RecurringSlot[] =
+export async function makeTasSchedule() {
+  const recurring_slots: DbRecurringSlot[] =
     await postgre.getRecurringSlotsData();
   const recs: Availability[] = await postgre.getAvailabilites();
   const noSessions = recurring_slots.length;
@@ -326,9 +327,58 @@ export async function scheduleAlgo() {
       break;
     }
   }
-  console.log(ok);
+  await updateSchedule(availabilities, recurring_slots);
+}
 
-  console.log(availabilities);
+
+const daysOfWeek: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+async function updateSchedule(availabilities: Availability[][], recurringSlots: DbRecurringSlot[]): Promise<void> {
+  /* "availabilities" tells us what each user got for each lab day,
+   * so all we have to do is check what lab day each slot is
+   */
+  const labSlots: DbSlot[] = await postgre.getLabSlots();
+  console.log(labSlots);
+
+  /* Map[RecurringSlot.id, Slot.id[]] which where slotsForDay[recurring.id] contains
+   contains a list of which actual lab slots are associated with that specific recurring slot id */
+  const slotsForDay: object = {};
+
+  recurringSlots.forEach(sl => {
+    slotsForDay[sl.id.toString()] = [];
+  });
+
+  labSlots.forEach(sl => {
+    const dow: string = daysOfWeek[sl.date.getUTCDay()];
+    const matchingId: DbRecurringSlot[] = recurringSlots.filter(s => s.day === dow);
+    if (matchingId.length === 1) {
+      slotsForDay[matchingId[0].id.toString()].push(sl.id);
+    } else {
+      console.log(`No matching recurring day of the week found for calendar date: \
+                  ${sl.date.toString()}. Possible error!`);
+    }
+  });
+
+  console.log(slotsForDay);
+
+  for (const taAvails  of availabilities) {
+    for (const av of taAvails) {
+      // The slot_ids from table 'lab_slots' which we want to set with av.priority;
+      const slotsToSet: number[] = slotsForDay[av.recurring_id.toString()];
+      for (const slot_id of slotsToSet) {
+        let status: SlotStatus;
+        if ((typeof av.assigned) === "number") {
+          // We got an assignment
+          status = "ASSIGNED";
+        } else {
+          // Must be either backup or unavailable for given slot
+          status = "UNAVAILABLE";
+        }
+        await postgre.assignTaToSlot(av.shortcode, slot_id, av.assigned, status);
+      }
+    }
+  }
+  console.log("Finished assigning all tas their respective slots in the database");
 }
 
 export { createAllTables, mockDataForTables };

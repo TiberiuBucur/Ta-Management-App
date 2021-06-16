@@ -1,11 +1,11 @@
-type SlotAssignment = number | "backup" | "none";
+export type SlotAssignment = number | "backup" | "none";
 
-type SlotStatus =
-  | "unavailable"
-  | "assigned"
-  | "claimed"
-  | "missed"
-  | "confirmed";
+export type SlotStatus =
+  "UNAVAILABLE"
+  | "ASSIGNED"
+  | "CLAIMED"
+  | "MISSED"
+  | "READY_TO_CLAIM";
 type DayOfWeek =
   | "Monday"
   | "Tuesday"
@@ -22,12 +22,27 @@ export type Slot = {
   date: Date;
 };
 
+export type DbSlot = {
+  id: number,
+  term: number;
+  startH: string;
+  endH: string;
+  date: Date;
+};
+
 export enum Priority {
   MAX = 1,
   MID = 2,
   LOW = 3,
   NONE = 4,
 }
+
+export type DbRecurringSlot = {
+  id: number,
+  day: DayOfWeek;
+  startH: string;
+  endH: string;
+};
 
 export type RecurringSlot = {
   day: DayOfWeek;

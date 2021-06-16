@@ -1,15 +1,20 @@
 import { Pool } from "pg";
 import {
   Availability,
+  DbRecurringSlot,
   RecurringSlot,
   recurringSlotFromString,
   Slot,
+  DbSlot,
+  slotFromJson,
+  SlotAssignment,
+  SlotStatus
 } from "../Slot";
 import {
   createAllTables,
   mockDataForTables,
   mockTasAvailabilities,
-  scheduleAlgo,
+  makeTasSchedule
 } from "./initsAndMocks";
 
 const prodMode = process.env.DATABASE_URL !== undefined;
@@ -23,12 +28,12 @@ export const TAS_AVAILABILITIES_TABLE: string = "tas_availabilities";
 
 type DayOfWeek =
   | "Monday"
-  | "Tuesday"
-  | "Wednesday"
-  | "Thursday"
-  | "Friday"
-  | "Saturday"
-  | "Sunday";
+| "Tuesday"
+| "Wednesday"
+| "Thursday"
+| "Friday"
+| "Saturday"
+| "Sunday";
 
 function dayOfWeekFromNumber(d: number): DayOfWeek {
   switch (d) {
@@ -61,10 +66,10 @@ class Postgre {
     const stringAvail = JSON.stringify(availability);
     return isSet
       ? pool.query("UPDATE tas SET availability = $1 WHERE username = $2", [
-          stringAvail,
-          username,
-        ])
-      : pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [
+        stringAvail,
+        username,
+      ])
+        : pool.query("INSERT INTO tas (username, availability) VALUES($1, $2)", [
           username,
           stringAvail,
         ]);
@@ -82,58 +87,58 @@ class Postgre {
     shortcode: string
   ): Promise<[any[] | null, object | null]> {
     return await pool
-      .query(
-        `SELECT shortcode, slot_id, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
-                             FROM tas_schedule JOIN lab_slots ON tas_schedule.slot_id = lab_slots.id \
-                             WHERE shortcode = $1;`,
-        [shortcode]
-      )
-      .then((res) => {
-        if (!res || !res.rows || res.rows.length === 0) {
-          return [null, null];
+    .query(
+      `SELECT shortcode, slot_id, assignment, status, date, starth AS start_hour, endh AS end_hour, term \
+        FROM tas_schedule JOIN lab_slots ON tas_schedule.slot_id = lab_slots.id \
+        WHERE shortcode = $1;`,
+      [shortcode]
+    )
+    .then((res) => {
+      if (!res || !res.rows || res.rows.length === 0) {
+        return [null, null];
+      }
+
+      let nextSession: Date | null = null;
+      let closestTime = Number.MAX_VALUE;
+      const now = Date.now();
+
+      // The times from the database are assumed to be UTC, but js's Date()
+      // assumes we are constructing local time, so we need to add the UTC offset (in case the server
+      // is running somewhere with no UTC) for accurate times
+      const _ofs = new Date();
+      const ofs = -_ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
+
+      res.rows.forEach((slot) => {
+        const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
+        const diff = date.getTime() - now;
+        if (diff < closestTime) {
+          closestTime = diff;
+          nextSession = date;
         }
 
-        let nextSession: Date | null = null;
-        let closestTime = Number.MAX_VALUE;
-        const now = Date.now();
-
-        // The times from the database are assumed to be UTC, but js's Date()
-        // assumes we are constructing local time, so we need to add the UTC offset (in case the server
-        // is running somewhere with no UTC) for accurate times
-        const _ofs = new Date();
-        const ofs = -_ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
-
-        res.rows.forEach((slot) => {
-          const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
-          const diff = date.getTime() - now;
-          if (diff < closestTime) {
-            closestTime = diff;
-            nextSession = date;
-          }
-
-          slot.day = dayOfWeekFromNumber(date.getUTCDay());
-          slot.date = {
-            day: date.getDate(),
-            month: date.getUTCMonth() + 1,
-            year: date.getUTCFullYear(),
-          };
-          if (!(slot.assignment === "backup" || slot.assignment === "none")) {
-            // the assignment is a number
-            slot.assignment = Number(slot.assignment);
-          }
-        });
-
-        let nextSess: object | null = null;
-        if (closestTime !== Number.MAX_VALUE) {
-          nextSess = {
-            day: nextSession.getUTCDate(),
-            month: nextSession.getUTCMonth() + 1,
-            year: nextSession.getUTCFullYear(),
-          };
+        slot.day = dayOfWeekFromNumber(date.getUTCDay());
+        slot.date = {
+          day: date.getDate(),
+          month: date.getUTCMonth() + 1,
+          year: date.getUTCFullYear(),
+        };
+        if (!(slot.assignment === "backup" || slot.assignment === "none")) {
+          // the assignment is a number
+          slot.assignment = Number(slot.assignment);
         }
-
-        return [res.rows, nextSess];
       });
+
+      let nextSess: object | null = null;
+      if (closestTime !== Number.MAX_VALUE) {
+        nextSess = {
+          day: nextSession.getUTCDate(),
+          month: nextSession.getUTCMonth() + 1,
+          year: nextSession.getUTCFullYear(),
+        };
+      }
+
+      return [res.rows, nextSess];
+    });
   }
 
   public async getUserRow(username: any): Promise<any> {
@@ -158,7 +163,31 @@ class Postgre {
     });
   }
 
-  public async getRecurringSlotsData(): Promise<RecurringSlot[]> {
+  public async assignTaToSlot(shortcode: string, slotId: number, assignment: SlotAssignment, status: SlotStatus): Promise<void> {
+    try {
+      await pool.query(`INSERT INTO ${TAS_SCHEDULE_TABLE} (shortcode, slot_id, assignment, status) VALUES ($1, $2, $3, $4);`,
+                       [shortcode, slotId, assignment, status]);
+    } catch (err) { console.log(`Error assigning ta ${shortcode} to slot ${slotId}:`); console.log(err); }
+  }
+
+  public async getLabSlots(): Promise<DbSlot[]> {
+    try { 
+      /* What we get back from postgres is a Date object, but node assumes we are using
+       * local times instead of UTC, so we need to transform them to UTC. */
+      const ofs: number = - new Date().getTimezoneOffset() * 60_000;
+      const res: any = await pool.query('SELECT * FROM lab_slots;');
+      (res.rows || []).forEach((s: Slot) => {
+        const d: Date = s.date;
+        const actualDate: Date = new Date(d.getTime() + ofs);
+        s.date = actualDate;
+        console.log(s.date);
+        console.log(actualDate);
+      });
+      return res.rows;
+    } catch (err) { console.log(err); return [] }
+  }
+
+  public async getRecurringSlotsData(): Promise<DbRecurringSlot[]> {
     let recs: any = [];
     try {
       recs = await pool.query(`SELECT * FROM ${RECURRING_SLOTS_TABLE};`);
@@ -246,12 +275,12 @@ class Postgre {
 
 const pool: Pool = prodMode
   ? new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    })
-  : new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  })
+    : new Pool({
       user: "postgres",
       host: "localhost",
       database: "testdb",
@@ -259,8 +288,7 @@ const pool: Pool = prodMode
       port: 5432,
     });
 
-const postgre: Postgre = new Postgre(pool);
+    const postgre: Postgre = new Postgre(pool);
 
-scheduleAlgo();
 
-export { postgre, pool };
+    export { postgre, pool };
