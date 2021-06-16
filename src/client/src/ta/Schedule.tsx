@@ -48,11 +48,11 @@ const Schedule = (props: { shortCode: string }) => {
   useEffect(() => {
     let isMounted = true;
     fetchSlots()
-      .then((ss) => {
+      .then(ss => {
         console.log("Received", ss);
         if (isMounted) setSlots(ss);
       })
-      .catch((err) => alert("Something went wrong"));
+      .catch(err => alert("Something went wrong"));
     setTimeout(scrollToNext, 1000);
 
     return () => {
@@ -62,6 +62,36 @@ const Schedule = (props: { shortCode: string }) => {
 
   return (
     <div>
+      {slots.length !== 0 && (
+        <div
+          style={{
+            padding: "20px 50px",
+          }}
+        >
+          <button
+            style={{
+              background: "white",
+              border: "none",
+              textDecoration: "underline",
+              cursor: "pointer",
+              fontSize: "inherit",
+              outline: "none",
+            }}
+            onClick={() => {
+              setSlots(prev => {
+                const copy = [...prev];
+                const idx = copy.findIndex(slot => slot.id === nextSessionId);
+                copy[idx].assignment = "backup";
+                copy[idx + 1].assignment = "backup";
+
+                return copy;
+              });
+            }}
+          >
+            I cannot attend the next session
+          </button>
+        </div>
+      )}
       {slots.length !== 0 && (
         <div className="calendar">
           <div className="calendar-text">
