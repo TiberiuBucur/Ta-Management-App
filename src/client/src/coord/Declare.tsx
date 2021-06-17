@@ -19,6 +19,12 @@ const mkSlots = (
   dateStr: string,
   recurring: boolean
 ): Slot[] => {
+  const _endH = parseInt(endH.split(":")[0]);
+  if (_endH - parseInt(startH.split(":")[0]) !== 2) {
+    alert("Only two hour sessions are supported at the moment");
+    return [];
+  }
+
   const date = new Date(dateStr);
   const res: Slot[] = [];
 
@@ -63,6 +69,15 @@ const Declare = () => {
   };
 
   const handleSubmit = async () => {
+    const secondHalfs = slots.map(s => ({
+      ...s,
+      startH: `${parseInt(s.startH.split(":")[0]) + 1}:00`,
+    }));
+    const firstHalfs = slots.map(s => ({
+      ...s,
+      endH: `${parseInt(s.endH.split(":")[0]) - 1}:00`,
+    }));
+
     const response = await fetch("/submitallsessions", {
       method: "POST",
       mode: "same-origin",
@@ -71,7 +86,10 @@ const Declare = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ slots, recurring: rec }),
+      body: JSON.stringify({
+        slots: [...secondHalfs, ...firstHalfs],
+        recurring: rec,
+      }),
     });
 
     const data = await response.json();
