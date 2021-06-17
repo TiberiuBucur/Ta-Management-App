@@ -15,9 +15,11 @@ import {
   createAllTables,
   mockDataForTables,
   mockTasAvailabilities,
+  createRecurringSlotsTable,
+  createTaAvailabilitiesTable
 } from "./initsAndMocks";
 
-const prodMode = process.env.DATABASE_URL !== undefined;
+const prodMode =  process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
 
 export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
@@ -54,7 +56,7 @@ function dayOfWeekFromNumber(d: number): DayOfWeek {
   }
 }
 
-class Postgre {
+export class Postgre {
   public pool: Pool;
 
   constructor(pool: Pool) {
@@ -111,7 +113,7 @@ class Postgre {
         res.rows.forEach(slot => {
           const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
           const diff = date.getTime() - now;
-          if (diff < closestTime) {
+          if (diff < closestTime && diff > 0) {
             closestTime = diff;
             nextSession = date;
           }
@@ -190,8 +192,6 @@ class Postgre {
         const d: Date = s.date;
         const actualDate: Date = new Date(d.getTime() + ofs);
         s.date = actualDate;
-        console.log(s.date);
-        console.log(actualDate);
       });
       return res.rows;
     } catch (err) {
@@ -252,12 +252,14 @@ class Postgre {
   }
 
   public async setSessions(slots: Slot[]): Promise<void> {
-    // Clears old sessions from database. TODO: change this if necessary
-    await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE}`);
-    await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
-    await pool.query(`DELETE FROM ${RECURRING_SLOTS_TABLE}`);
+    await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE};`);
+    await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE};`);
+    await pool.query(`DROP TABLE ${TAS_AVAILABILITIES_TABLE};`);
+    await pool.query(`DROP TABLE ${RECURRING_SLOTS_TABLE};`);
+    await createRecurringSlotsTable();
+    await createTaAvailabilitiesTable();
 
-    console.log(slots);
+
     for (const slot of slots) {
       const { date, startH, endH, term } = slot;
 
@@ -422,8 +424,8 @@ class Postgre {
     /* "availabilities" tells us what each user got for each lab day,
      * so all we have to do is check what lab day each slot is
      */
+    await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE};`);
     const labSlots: DbSlot[] = await postgre.getLabSlots();
-    console.log(labSlots);
 
     /* Map[RecurringSlot.id, Slot.id[]] which where slotsForDay[recurring.id] contains
    contains a list of which actual lab slots are associated with that specific recurring slot id */
@@ -446,7 +448,6 @@ class Postgre {
       }
     });
 
-    console.log(slotsForDay);
 
     for (const taAvails of availabilities) {
       for (const av of taAvails) {
@@ -454,12 +455,12 @@ class Postgre {
         const slotsToSet: number[] = slotsForDay[av.recurring_id.toString()];
         for (const slot_id of slotsToSet) {
           let status: SlotStatus;
-          if (typeof av.assigned === "number") {
-            // We got an assignment
-            status = "ASSIGNED";
-          } else {
-            // Must be either backup or unavailable for given slot
+          if (av.assigned === "none") {
+            // We cannot attend this slot
             status = "UNAVAILABLE";
+          } else {
+            // We are a backup or we are assigned to this slot
+            status = "ASSIGNED";
           }
           await postgre.assignTaToSlot(
             av.shortcode,

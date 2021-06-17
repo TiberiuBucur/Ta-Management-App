@@ -64,12 +64,12 @@ async function createLabSlotsTable(): Promise<void> {
   await createTable(createQ, LAB_SLOTS_TABLE);
 }
 
-async function createRecurringSlotsTable(): Promise<void> {
+export async function createRecurringSlotsTable(): Promise<void> {
   const createQ: string = `CREATE TABLE ${RECURRING_SLOTS_TABLE} (id SERIAL PRIMARY KEY, day VARCHAR(10), startH TIME, endH time);`;
   await createTable(createQ, RECURRING_SLOTS_TABLE);
 }
 
-async function createTaAvailabilitiesTable(): Promise<void> {
+export async function createTaAvailabilitiesTable(): Promise<void> {
   const createQ: string = `CREATE TABLE ${TAS_AVAILABILITIES_TABLE} (id SERIAL PRIMARY KEY, shortcode VARCHAR(30), priority SMALLINT, \
     recurring_id INT REFERENCES ${RECURRING_SLOTS_TABLE}(id));`;
   await createTable(createQ, TAS_AVAILABILITIES_TABLE);
