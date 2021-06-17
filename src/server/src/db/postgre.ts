@@ -16,10 +16,10 @@ import {
   mockDataForTables,
   mockTasAvailabilities,
   createRecurringSlotsTable,
-  createTaAvailabilitiesTable
+  createTaAvailabilitiesTable,
 } from "./initsAndMocks";
 
-const prodMode =  process.env.DATABASE_URL !== undefined;
+const prodMode = process.env.DATABASE_URL !== undefined;
 console.log(`PRODUCTION MODE: ${prodMode}`);
 
 export const TAS_SCHEDULE_TABLE: string = "tas_schedule";
@@ -95,7 +95,7 @@ export class Postgre {
         WHERE shortcode = $1;`,
         [shortcode]
       )
-      .then(res => {
+      .then((res) => {
         if (!res || !res.rows || res.rows.length === 0) {
           return [null, null];
         }
@@ -110,7 +110,7 @@ export class Postgre {
         const _ofs = new Date();
         const ofs = -_ofs.getTimezoneOffset() * 60000; // Offset in miliseconds from UTC
 
-        res.rows.forEach(slot => {
+        res.rows.forEach((slot) => {
           const date = new Date(new Date(slot.date).getTime() + ofs); // Construct UTC date
           const diff = date.getTime() - now;
           if (diff < closestTime && diff > 0) {
@@ -160,7 +160,7 @@ export class Postgre {
       console.log(err);
       return;
     }
-    return recs.rows.map(rec => {
+    return recs.rows.map((rec) => {
       return `${rec.day} ${rec.starth} - ${rec.endh}`;
     });
   }
@@ -208,7 +208,7 @@ export class Postgre {
       console.log(err);
       return;
     }
-    return recs.rows.map(rec => {
+    return recs.rows.map((rec) => {
       return {
         id: rec.id,
         day: rec.day,
@@ -228,7 +228,7 @@ export class Postgre {
       console.log(err);
       return;
     }
-    return recs.rows.map(rec => {
+    return recs.rows.map((rec) => {
       return {
         shortcode: rec.shortcode,
         priority: rec.priority,
@@ -258,7 +258,6 @@ export class Postgre {
     await pool.query(`DROP TABLE ${RECURRING_SLOTS_TABLE};`);
     await createRecurringSlotsTable();
     await createTaAvailabilitiesTable();
-
 
     for (const slot of slots) {
       const { date, startH, endH, term } = slot;
@@ -299,7 +298,8 @@ export class Postgre {
   }
 
   public async makeTasSchedule() {
-    const recurring_slots: DbRecurringSlot[] = await postgre.getRecurringSlotsData();
+    const recurring_slots: DbRecurringSlot[] =
+      await postgre.getRecurringSlotsData();
     const recs: Availability[] = await postgre.getAvailabilites();
     const noSessions = recurring_slots.length;
 
@@ -361,7 +361,10 @@ export class Postgre {
       priCrt[i] = 0;
     }
 
-    while (totalSlotsFree() > 0) {
+    let done: boolean = false;
+
+    while (!done) {
+      done = true;
       for (let i = 0; i < noTAs; i++) {
         let j = priCrt[i];
         const avail = availabilities[i];
@@ -384,8 +387,17 @@ export class Postgre {
           slotsFree[rec_id]--;
           j++;
         }
+        if (j !== priCrt[i]) {
+          done = false;
+        }
         priCrt[i] = j;
       }
+    }
+
+    if (totalSlotsFree() !== 0) {
+      console.log(
+        "The algorithm failed to produce a schedule. This is probably due to the availabilities submitted by the TAs. Try to allocate more lab slots in the most popular sessions or ask the TAs for new availabilities."
+      );
     }
 
     let ok = true;
@@ -431,14 +443,14 @@ export class Postgre {
    contains a list of which actual lab slots are associated with that specific recurring slot id */
     const slotsForDay: object = {};
 
-    recurringSlots.forEach(sl => {
+    recurringSlots.forEach((sl) => {
       slotsForDay[sl.id.toString()] = [];
     });
 
-    labSlots.forEach(sl => {
+    labSlots.forEach((sl) => {
       const dow: string = Postgre.daysOfWeek[sl.date.getUTCDay()];
       const matchingId: DbRecurringSlot[] = recurringSlots.filter(
-        s => s.day === dow
+        (s) => s.day === dow
       );
       if (matchingId.length === 1) {
         slotsForDay[matchingId[0].id.toString()].push(sl.id);
@@ -447,7 +459,6 @@ export class Postgre {
                   ${sl.date.toString()}. Possible error!`);
       }
     });
-
 
     for (const taAvails of availabilities) {
       for (const av of taAvails) {
