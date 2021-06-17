@@ -67,38 +67,6 @@ const Schedule = (props: { shortCode: string }) => {
   return (
     <div>
       {slots.length !== 0 && (
-        <div
-          style={{
-            padding: "20px 50px",
-          }}
-        >
-          <button
-            style={{
-              background: "var(--color-red)",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "inherit",
-              outline: "none",
-              padding: "10px 13px",
-              color: "white",
-              borderRadius: "3px",
-            }}
-            onClick={() => {
-              setSlots(prev => {
-                const copy = [...prev];
-                const idx = copy.findIndex(slot => slot.id === nextSessionId);
-                copy[idx].assignment = "backup";
-                copy[idx + 1].assignment = "backup";
-
-                return copy;
-              });
-            }}
-          >
-            I cannot attend the next session
-          </button>
-        </div>
-      )}
-      {slots.length !== 0 && (
         <div className="calendar">
           <div className="calendar-text">
             These are your slots for the Lab sessions in this term. Press one of
