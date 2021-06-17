@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Slot, { cmpSlots, prettyDate } from "./Slot";
+import nub from "../tsutils";
 import "./Declare.css";
 
 const weekDays = [
@@ -52,10 +53,12 @@ const Declare = () => {
 
   const handleAdd = () => {
     if (isRec)
-      setRec(prev => [
-        ...prev,
-        `${weekDays[new Date(date).getDay() - 1]} ${startH} - ${endH}`,
-      ]);
+      setRec(prev =>
+        nub([
+          ...prev,
+          `${weekDays[new Date(date).getDay() - 1]} ${startH} - ${endH}`,
+        ])
+      );
     setSlots([...slots, ...mkSlots(startH, endH, date, isRec)]);
   };
 
