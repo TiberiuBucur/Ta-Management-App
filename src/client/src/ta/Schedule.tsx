@@ -74,12 +74,14 @@ const Schedule = (props: { shortCode: string }) => {
         >
           <button
             style={{
-              background: "white",
+              background: "var(--color-red)",
               border: "none",
-              textDecoration: "underline",
               cursor: "pointer",
               fontSize: "inherit",
               outline: "none",
+              padding: "10px 13px",
+              color: "white",
+              borderRadius: "3px",
             }}
             onClick={() => {
               setSlots(prev => {
