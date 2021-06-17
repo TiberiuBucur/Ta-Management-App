@@ -13,39 +13,6 @@ const weekDays = [
   "Sunday",
 ];
 
-const mkSlots = (
-  startH: string,
-  endH: string,
-  dateStr: string,
-  recurring: boolean
-): Slot[] => {
-  const _endH = parseInt(endH.split(":")[0]);
-  if (_endH - parseInt(startH.split(":")[0]) !== 2) {
-    alert("Only two hour sessions are supported at the moment");
-    return [];
-  }
-
-  const date = new Date(dateStr);
-  const res: Slot[] = [];
-
-  const noSlots = recurring ? 10 : 1;
-  new Array(noSlots).fill(undefined).forEach(ignored => {
-    res.push({
-      day: weekDays[date.getDay() - 1],
-      startH,
-      endH,
-      date: {
-        day: date.getUTCDate(),
-        month: date.getMonth() + 1,
-        year: date.getUTCFullYear(),
-      },
-    });
-    date.setDate(date.getDate() + 7);
-  });
-
-  return res;
-};
-
 const Declare = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
 
@@ -57,14 +24,47 @@ const Declare = () => {
 
   const [rec, setRec] = useState<string[]>([]);
 
-  const handleAdd = () => {
-    if (isRec)
+  const mkSlots = (
+    startH: string,
+    endH: string,
+    dateStr: string,
+    recurring: boolean
+  ): Slot[] => {
+    const _endH = parseInt(endH.split(":")[0]);
+    if (_endH - parseInt(startH.split(":")[0]) !== 2) {
+      alert("Only two hour sessions are supported at the moment");
+      return [];
+    }
+    if (recurring) {
       setRec(prev =>
         nub([
           ...prev,
           `${weekDays[new Date(date).getDay() - 1]} ${startH} - ${endH}`,
         ])
       );
+    }
+
+    const date = new Date(dateStr);
+    const res: Slot[] = [];
+
+    const noSlots = recurring ? 10 : 1;
+    new Array(noSlots).fill(undefined).forEach(ignored => {
+      res.push({
+        day: weekDays[date.getDay() - 1],
+        startH,
+        endH,
+        date: {
+          day: date.getUTCDate(),
+          month: date.getMonth() + 1,
+          year: date.getUTCFullYear(),
+        },
+      });
+      date.setDate(date.getDate() + 7);
+    });
+
+    return res;
+  };
+  const handleAdd = () => {
     setSlots([...slots, ...mkSlots(startH, endH, date, isRec)]);
   };
 
