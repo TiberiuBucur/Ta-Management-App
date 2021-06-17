@@ -255,6 +255,7 @@ class Postgre {
     // Clears old sessions from database. TODO: change this if necessary
     await pool.query(`DELETE FROM ${TAS_SCHEDULE_TABLE}`);
     await pool.query(`DELETE FROM ${LAB_SLOTS_TABLE}`);
+    await pool.query(`DELETE FROM ${RECURRING_SLOTS_TABLE}`);
 
     console.log(slots);
     for (const slot of slots) {
