@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
-import Slot, { slotFromJson, slots as sampleSlots } from "./Slot";
+import Slot, { cmpSlots, slotFromJson, slots as sampleSlots } from "./Slot";
 import SlotBox from "./SlotBox";
 
 const groupByDay = (slots: Slot[]): Slot[][] => {
@@ -53,7 +53,10 @@ const Schedule = (props: { shortCode: string }) => {
         if (isMounted) setSlots(ss);
         return true;
       })
-      .catch(err => { console.log(err); alert("Something went wrong while fetching slots"); });
+      .catch(err => {
+        console.log(err);
+        alert("Something went wrong while fetching slots");
+      });
     setTimeout(scrollToNext, 1000);
 
     return () => {
@@ -139,7 +142,7 @@ const Schedule = (props: { shortCode: string }) => {
       <div className="schedule">
         {slots.length === 0
           ? "Loading slots..."
-          : groupByDay(slots).map(([slot1, slot2]) => {
+          : groupByDay(slots.sort(cmpSlots)).map(([slot1, slot2]) => {
               const isNext = slot1.id === nextSessionId;
               return (
                 <div

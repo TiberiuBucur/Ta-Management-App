@@ -21,6 +21,30 @@ type Slot = {
   };
 };
 
+type Date = {
+  day: number;
+  month: number;
+  year: number;
+};
+
+const compDates = (d1: Date, d2: Date): number => {
+  if (d1.year < d2.year) return -1;
+  if (d1.year > d2.year) return 1;
+  if (d1.month < d2.month) return -1;
+  if (d1.month > d2.month) return 1;
+  if (d1.day < d2.day) return -1;
+  if (d1.day > d2.day) return 1;
+
+  return 0;
+};
+
+export const cmpSlots = (s1: Slot, s2: Slot): number => {
+  const datesCmp = compDates(s1.date, s2.date);
+  if (datesCmp !== 0) return datesCmp;
+  const startHCmp = s1.startH < s2.startH;
+  return startHCmp ? -1 : 1;
+};
+
 export const slotFromJson = (json: any): Slot => {
   let { slot_id, day, start_hour, end_hour, assignment, status, date } = json;
 
@@ -59,7 +83,7 @@ export const slots = {
       status: "MISSED",
       assignment: "backup",
       date: {
-        day: 29,
+        day: 17,
         month: 5,
         year: 2021,
       },
@@ -74,7 +98,7 @@ export const slots = {
       status: "MISSED",
       assignment: "backup",
       date: {
-        day: 29,
+        day: 17,
         month: 5,
         year: 2021,
       },
