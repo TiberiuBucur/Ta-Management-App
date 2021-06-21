@@ -16,6 +16,8 @@ const io = require("socket.io")(5555, {
   },
 });
 
+console.log("IO OBJECT RIGHT HERE", io);
+
 io.on("connection", socket => {
   console.log(socket.id);
   socket.on("free_channel", (data: any) => {
