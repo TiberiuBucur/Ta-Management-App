@@ -1,9 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import Slot from "./Slot";
 import "./SlotBox.css";
 
+const sock = io("ws://localhost:5555");
+sock.on("connect", () => {
+  console.log("CONNECTED");
+});
+(document as any).socca = sock;
+
 const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
   const [isPopup, setIsPopup] = useState(false);
+  const [free, setFree] = useState<number[]>([]);
+  // const sock = useRef<any>(
+  //   slot.status === "ASSIGNED" ? io.connect("http://localhost:5555") : undefined
+  // );
+
+  useEffect(() => {
+    if (slot.status === "ASSIGNED") {
+      sock.on(`free_channel_for_${slot.id}`, chNo => {
+        setFree(prev => [...prev, chNo]);
+      });
+      sock.on(`channel_taken_for_${slot.id}`, chNo => {
+        setFree(prev => prev.filter(no => no !== chNo));
+      });
+      // sock.current.on(`free_channel_for_${slot.id}`, (data: any) => {
+      //   console.log(data);
+      // });
+    }
+  }, [slot.id, slot.status]);
 
   const getDateText = (slot: Slot): string =>
     `${slot.day}, ${slot.date.day}/${slot.date.month}`;
@@ -84,35 +109,42 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
     }
   };
 
-  const mockChannels = [1, 2, 3, 4];
-
   return (
     <div className={`slot-box ${slot.status}`}>
       {isPopup && (
         <div className="popup">
           {slot.assignment === "backup" ? (
             <div>
-              {mockChannels.map((no) => (
-                <button
-                  key={no}
-                  className="free-ch-bttn"
-                  onClick={() => {
-                    setSlots((prev: Slot[]) => {
-                      const copy = [...prev];
-                      const index = copy.findIndex((el) => el.id === slot.id);
+              {free.length === 0
+                ? "There are no free channels at the moment"
+                : free.map(no => (
+                    <button
+                      key={no}
+                      className="free-ch-bttn"
+                      onClick={() => {
+                        sock.emit("channel_taken", {
+                          slotid: slot.id,
+                          channelNo: no,
+                        });
+                        setSlots((prev: Slot[]) => {
+                          const copy = [...prev];
+                          const index = copy.findIndex(el => el.id === slot.id);
 
-                      copy[index] = {
-                        ...slot,
-                        assignment: no,
-                      };
-                      return copy;
-                    });
-                    setIsPopup(false);
-                  }}
-                >
-                  Channel {no}
-                </button>
-              ))}
+                          copy[index] = {
+                            ...slot,
+                            assignment: no,
+                          };
+                          return copy;
+                        });
+                        setIsPopup(false);
+                      }}
+                    >
+                      Channel {no}
+                    </button>
+                  ))}
+              <button className="close-bttn" onClick={() => setIsPopup(false)}>
+                Close
+              </button>
             </div>
           ) : (
             <div>
@@ -126,9 +158,15 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
                     // TODO: Change to missed / backup
                     // TODO: submit to backend
 
+                    console.log(sock);
+                    sock.emit("free_channel", {
+                      slotid: slot.id,
+                      channelNo: slot.assignment,
+                    });
+
                     setSlots((prev: Slot[]) => {
                       const copy = [...prev];
-                      const index = copy.findIndex((el) => el.id === slot.id);
+                      const index = copy.findIndex(el => el.id === slot.id);
 
                       copy[index] = {
                         ...slot,
