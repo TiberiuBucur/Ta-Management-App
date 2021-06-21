@@ -15,8 +15,9 @@ import { sample1, sample2 } from "./Samples";
 //     origin: "*",
 //   },
 // });
-const httpServer = require("http").createServer();
-const io = require("socket.io")(httpServer, {
+const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
   cors: { origin: "*" },
 });
 
@@ -25,7 +26,7 @@ const io = require("socket.io")(httpServer, {
 // console.log("IO OBJECT RIGHT HERE", io);
 
 io.on("connection", socket => {
-  console.log(socket.id);
+  console.log("NEW CONNECTION", socket.id);
   socket.on("free_channel", (data: any) => {
     console.log("NEW FREE CHANNEL", data);
     io.emit(`free_channel_for_${data.slotid}`, data.channelNo);
@@ -37,28 +38,25 @@ io.on("connection", socket => {
   });
 }).setMaxListeners(0);
 
-httpServer.listen(5555);
-
-const server = express();
 const PORT = process.env.PORT || 5000;
 
 const pathToStaticContent = path.resolve(__dirname, "../build");
 const pathToRedirect = path.resolve(__dirname, "../build/redirect.html");
 console.log(pathToStaticContent);
 
-server.use(express.static(pathToStaticContent));
-server.use(express.json());
+app.use(express.static(pathToStaticContent));
+app.use(express.json());
 
 const handler = new Handler(postgre);
 
-server.post("/newavail/:username", async (req, res) => {
+app.post("/newavail/:username", async (req, res) => {
   const { username } = req.params;
   const availability = req.body;
   const msg = await handler.submitAvailability(username, availability);
   res.status(200).send({ msg });
 });
 
-server.get("/sessions", async (req: any, res: any) => {
+app.get("/sessions", async (req: any, res: any) => {
   try {
     const recs: string[] = await postgre.getRecurring();
     res.status(200).send({ recs });
@@ -67,7 +65,7 @@ server.get("/sessions", async (req: any, res: any) => {
   }
 });
 
-server.get("/schedule/:shortcode", async (req, res) => {
+app.get("/schedule/:shortcode", async (req, res) => {
   const { shortcode } = req.params;
 
   if (shortcode === "sample1") {
@@ -95,7 +93,7 @@ server.get("/schedule/:shortcode", async (req, res) => {
   }
 });
 
-server.post("/submitallsessions", async (req, res) => {
+app.post("/submitallsessions", async (req, res) => {
   const { slots, recurring } = req.body;
   console.log(slots);
   const data: Slot[] = slots.map(s => slotFromJson(s));
@@ -112,7 +110,7 @@ server.post("/submitallsessions", async (req, res) => {
   }
 });
 
-server.post("/computesched", async (req, res) => {
+app.post("/computesched", async (req, res) => {
   try {
     await postgre.makeTasSchedule();
     res.status(200).json({ msg: "Successfully created a schedule." });
@@ -121,14 +119,14 @@ server.post("/computesched", async (req, res) => {
   }
 });
 
-server.get("/allavailabilities", async (_, res) => {
+app.get("/allavailabilities", async (_, res) => {
   const qresponse = await postgre.pool.query("SELECT * FROM tas");
   const { rows } = qresponse;
 
   res.status(200).json({ rows });
 });
 
-server.get("*", (_, res) => {
+app.get("*", (_, res) => {
   res.sendFile(pathToRedirect);
 });
 
