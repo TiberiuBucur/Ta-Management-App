@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import Slot from "./Slot";
 import "./SlotBox.css";
 
-const sock = io("http://ta-management-app.herokuapp.com/:5555");
+const sock = io("http://ta-management-app.herokuapp.com:5555");
 sock.on("connect", () => {
   console.log("CONNECTED");
 });
