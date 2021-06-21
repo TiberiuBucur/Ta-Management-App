@@ -10,13 +10,19 @@ import {
 } from "./Slot";
 import { sample1, sample2 } from "./Samples";
 
-const io = require("socket.io")(5555, {
-  cors: {
-    origin: "*",
-  },
+// const io = require("socket.io")(5555, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
+const httpServer = require("http").createServer();
+const io = require("socket.io")(httpServer, {
+  cors: { origin: "*" },
 });
 
-console.log("IO OBJECT RIGHT HERE", io);
+// const io = require("socket.io")();
+
+// console.log("IO OBJECT RIGHT HERE", io);
 
 io.on("connection", socket => {
   console.log(socket.id);
@@ -24,11 +30,14 @@ io.on("connection", socket => {
     console.log("NEW FREE CHANNEL", data);
     io.emit(`free_channel_for_${data.slotid}`, data.channelNo);
   });
+
   socket.on("channel_taken", (data: any) => {
     console.log("CHANNEL TAKEN", data);
     io.emit(`channel_taken_for_${data.slotid}`, data.channelNo);
   });
 }).setMaxListeners(0);
+
+httpServer.listen(5555);
 
 const server = express();
 const PORT = process.env.PORT || 5000;
