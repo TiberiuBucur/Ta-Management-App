@@ -12,4 +12,5 @@ COPY . /app/
 RUN cd src/client && npm run build
 RUN cd src/server && npm run build
 
+EXPOSE 5555
 CMD node src/server/target/src/index.js
