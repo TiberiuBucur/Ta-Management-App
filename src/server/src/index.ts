@@ -22,6 +22,10 @@ io.on("connection", socket => {
     console.log("NEW FREE CHANNEL", data);
     io.emit(`free_channel_for_${data.slotid}`, data.channelNo);
   });
+  socket.on("channel_taken", (data: any) => {
+    console.log("CHANNEL TAKEN", data);
+    io.emit(`channel_taken_for_${data.slotid}`, data.channelNo);
+  });
 }).setMaxListeners(0);
 
 const server = express();

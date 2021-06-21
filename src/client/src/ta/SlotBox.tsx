@@ -1,4 +1,3 @@
-import { Socket } from "dgram";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Slot from "./Slot";
@@ -22,11 +21,14 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
       sock.on(`free_channel_for_${slot.id}`, chNo => {
         setFree(prev => [...prev, chNo]);
       });
+      sock.on(`channel_taken_for_${slot.id}`, chNo => {
+        setFree(prev => prev.filter(no => no !== chNo));
+      });
       // sock.current.on(`free_channel_for_${slot.id}`, (data: any) => {
       //   console.log(data);
       // });
     }
-  }, []);
+  }, [slot.id, slot.status]);
 
   const getDateText = (slot: Slot): string =>
     `${slot.day}, ${slot.date.day}/${slot.date.month}`;
@@ -119,6 +121,10 @@ const SlotBox = ({ slot, setSlots }: { slot: Slot; setSlots: any }) => {
                       key={no}
                       className="free-ch-bttn"
                       onClick={() => {
+                        sock.emit("channel_taken", {
+                          slotid: slot.id,
+                          channelNo: no,
+                        });
                         setSlots((prev: Slot[]) => {
                           const copy = [...prev];
                           const index = copy.findIndex(el => el.id === slot.id);
