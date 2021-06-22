@@ -22,12 +22,12 @@ const Dashboard = () => {
             .catch(err => alert("Something went wrong"));
         }}
       >
-        Compute Schedule
+        Assign TAs to lab sessions
       </button>
       {isComputing && (
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <img id="loading" alt="not_found" src="/images/loading.png" />
-          Assign TAs to lab sessions...
+          Computing schedule...
         </div>
       )}
     </div>
