@@ -6,6 +6,20 @@
   justify-content: center; */
 }
 
+.coord-page .dashboard #loading {
+  width: 20px;
+  animation: rotation 1.2s infinite cubic-bezier(0.24, 0.79, 0.8, 0.26);
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .coord-page .compute-schedule-bttn {
   background-color: var(--color-blue);
   color: white;
