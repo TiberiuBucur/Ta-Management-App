@@ -92,6 +92,8 @@ const Declare = () => {
       }),
     });
 
+    alert("Sessions declared successfully!")
+
     const data = await response.json();
 
     console.log(data);
